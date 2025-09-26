@@ -1,0 +1,31 @@
+# Build folders
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+/Makefile
+
+# Binaries
+*.exe
+*.dll
+*.a
+*.lib
+*.so
+*.dylib
+*.obj
+*.o
+*.pdb
+
+# IDE specific
+.vscode/
+.idea/
+*.user
+*.suo
+*.vcxproj
+*.vcxproj.filters
+*.xcodeproj
+
+# Raylib specific
+raylib.*
+raymath.*
+rlgl.*
