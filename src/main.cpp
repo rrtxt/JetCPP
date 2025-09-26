@@ -2,54 +2,60 @@
 #include "raymath.h"
 #include "iostream"
 
-const int VELOCITY = 5;
+const int VELOCITY = 200;
 const int TIMESCALE = 1;
 
 class Player{
     public:
         Vector2 position;
-        int width;
-        int height;
-        Player(float x , float y){
+        Vector2 size;
+        Vector2 inputDirection;
+        Player(int width, int height, float x , float y){
             position.x = x;
             position.y = y;
-            width = 20;
-            height = 30;
+            size.x = width;
+            size.y = height;
         }
 
         void Update(){
+            inputDirection = {0, 0};
             if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-                position.y -= 1 * VELOCITY * TIMESCALE;
+                inputDirection.y -= 1;
             }
             if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
-                position.y += 1 * VELOCITY * TIMESCALE;
+                inputDirection.y += 1;
             }
             if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-                position.x += 1 * VELOCITY * TIMESCALE;
+                inputDirection.x += 1;
             }
             if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-                position.x -= 1 * VELOCITY * TIMESCALE;
+                inputDirection.x -= 1;
             }
 
-                position.x = Clamp(position.x, 0, GetScreenWidth() - width);
-                position.y = Clamp(position.y, 0, GetScreenHeight() - height);
+            // Normalize diagonal movement
+            if (Vector2Length(inputDirection) > 0){
+                inputDirection = Vector2Normalize(inputDirection);
             }
 
-            void Draw(){
-                DrawRectangle(position.x, position.y, width, height, RED);
+            Vector2 velocity = Vector2Scale(inputDirection, VELOCITY * GetFrameTime() * TIMESCALE);
+            position = Vector2Add(position, velocity);
+        }
+
+        void Draw(){
+            DrawRectangle(position.x, position.y, size.x, size.y, RED);
         }
     };
     
     
-    int main() {
-        InitWindow(600, 900, "Jet Game");
-        SetTargetFPS(60);
-        Player player = Player(GetScreenWidth() / 2, GetScreenHeight() / 2);
-        std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
-        
-        while (!WindowShouldClose()) {
-            player.Update();
-            
+int main() {
+    InitWindow(600, 900, "Jet Game");
+    SetTargetFPS(60);
+    Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2);
+    std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
+    
+    while (!WindowShouldClose()) {
+        player.Update();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
         player.Draw();
