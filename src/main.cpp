@@ -18,7 +18,7 @@ class Bullet{
         Bullet(float x, float y){
             position.x = x;
             position.y = y;
-            speed = 300;
+            speed = 350;
             width = 5;
             height = 10;
         }
@@ -47,11 +47,15 @@ class Player{
         Vector2 size;
         Vector2 inputDirection;
         std::vector<Bullet> bullets;
+        float shootCooldown;
+        float fireRate;
         Player(int width, int height, float x , float y){
             position.x = x;
             position.y = y;
             size.x = width;
             size.y = height;
+            shootCooldown = 0;
+            fireRate = 0.2f; // Seconds between shots
         }
 
         void Update(){
@@ -75,11 +79,16 @@ class Player{
                 inputDirection = Vector2Normalize(inputDirection);
             }
 
+            // Shooting cooldown
+            shootCooldown -= GetFrameTime();
+            if (shootCooldown < 0) shootCooldown = 0;
+            
             // Shooting
-            if (IsKeyPressed(KEY_SPACE)) {
+            if (IsKeyDown(KEY_SPACE) && shootCooldown <= 0) {
                 Bullet newBullet(position.x + size.x / 2 - 2.5f, position.y);
                 newBullet.active = true;
                 bullets.push_back(newBullet);
+                shootCooldown = fireRate;
             }
 
             // Update bullets
@@ -94,6 +103,7 @@ class Player{
             // Update position
             Vector2 velocity = Vector2Scale(inputDirection, VELOCITY * GetFrameTime() * TIMESCALE);
             position = Vector2Add(position, velocity);
+            position = Vector2Clamp(position, {0, 0}, {GetScreenWidth() - size.x, GetScreenHeight() - size.y});
         }
 
         void Draw(){
