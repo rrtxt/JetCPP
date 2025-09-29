@@ -179,6 +179,7 @@ class Enemy{
         Vector2 position;
         float spawnCooldown;
         float spawnRate;
+        int spawnCount = 0;
         int maxEnemies;
         std::vector<Enemy> enemies;
         Spawner(float x, float y){
@@ -194,11 +195,12 @@ class Enemy{
             if (spawnCooldown < 0) spawnCooldown = 0;
             
             // Spawning
-            if (spawnCooldown <= 0 && enemies.size() < maxEnemies) {
+            if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
                 Enemy newEnemy(position.x, position.y);
                 newEnemy.active = true;
                 enemies.push_back(newEnemy);
                 spawnCooldown = spawnRate;
+                spawnCount++;
             }
             
             // Update enemies
@@ -209,11 +211,23 @@ class Enemy{
             // Remove inactive enemies
             enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
             [](Enemy& e) { return !e.active; }), enemies.end());   
+        
+            // Update spawn position to random x
+            if (spawnCount >= maxEnemies && enemies.empty()){
+                Move(GetRandomValue(0, GetScreenWidth() - 30), position.y);
+                spawnCount = 0;
+            }
         }
+
         void Draw(){
             for(auto& enemy : enemies){
                 enemy.Draw();
             }
+        }
+
+        void Move(float x, float y){
+            position.x = x;
+            position.y = y;
         }
     };
 
