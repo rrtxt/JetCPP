@@ -112,22 +112,99 @@ class Player{
                 bullet.Draw();
             }
         }
-    };
+};
 
-    
+class Enemy{
+    public:
+        Vector2 position;
+        Vector2 size;
+        float speed;
+        bool active;
+        Enemy(float x, float y){
+            position.x = x;
+            position.y = y;
+            size.x = 30;
+            size.y = 30;
+            speed = 100;
+            active = true;
+        }
+        void Update(){
+            if(active){
+                // Move downward
+                position.y += speed * GetFrameTime();
+                
+                // Set inactive if off-screen
+                if(position.y > GetScreenHeight()){
+                    active = false;
+                }
+            }
+        }
+
+        void Draw(){
+            if(active){
+                DrawRectangle(position.x, position.y, size.x, size.y, BLUE);
+            }
+        }
+};
+
+class Spawner{
+    public:
+        Vector2 position;
+        float spawnCooldown;
+        float spawnRate;
+        int maxEnemies;
+        std::vector<Enemy> enemies;
+        Spawner(float x, float y){
+            position.x = x;
+            position.y = y;
+            spawnCooldown = 0;
+            spawnRate = 1.0f; // Seconds between spawns
+            maxEnemies = 5;
+        }
+        void Update(){
+            // Spawning cooldown
+            spawnCooldown -= GetFrameTime();
+            if (spawnCooldown < 0) spawnCooldown = 0;
+            
+            // Spawning
+            if (spawnCooldown <= 0 && enemies.size() < maxEnemies) {
+                Enemy newEnemy(position.x, position.y);
+                newEnemy.active = true;
+                enemies.push_back(newEnemy);
+                spawnCooldown = spawnRate;
+            }
+
+            // Update enemies
+            for (auto& enemy : enemies) {
+                enemy.Update();
+            }
+
+            // Remove inactive enemies
+            enemies.erase(std::remove_if(enemies.begin(), enemies.end(),
+                [](Enemy& e) { return !e.active; }), enemies.end());   
+        }
+        void Draw(){
+            for(auto& enemy : enemies){
+                enemy.Draw();
+            }
+        }
+}; 
     
 int main() {
     InitWindow(600, 900, "Jet Game");
     SetTargetFPS(60);
     Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2);
+    Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30);
     std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
     
     while (!WindowShouldClose()) {
         player.Update();
+        spawner.Update();
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
         player.Draw();
+        spawner.Draw();  
         EndDrawing();
     }
 
