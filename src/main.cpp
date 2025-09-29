@@ -7,7 +7,22 @@
 using namespace std;
 
 const int VELOCITY = 200;
-const int TIMESCALE = 1;
+bool isGameOver = false;
+class TimeScale {
+    private:
+        static int timescale;
+    public:
+        TimeScale(int initial = 1) { timescale = initial; }
+        static int Get() { return timescale; }
+        static void Set(int value) { 
+            if(value < 0) value = 0;
+            timescale = value;
+        }
+};
+
+int TimeScale::timescale = 1;
+
+TimeScale TIMESCALE(1);
 class Bullet{
     public:
         Vector2 position;
@@ -30,7 +45,7 @@ class Bullet{
         void Update(){
             if(active){
                 // Move upward
-                position.y -= speed * GetFrameTime();
+                position.y -= speed * GetFrameTime() * TimeScale::Get();
                 
                 // Update collision box
                 collision.y = position.y;
@@ -39,6 +54,12 @@ class Bullet{
                 if(position.y + height < 0){
                     active = false;
                 }
+            }
+        }
+
+        void OnCollision(){
+            if (active){
+                active = false;
             }
         }
 
@@ -51,13 +72,21 @@ class Bullet{
 
 class Player{
     public:
+        // Coordinates and size
         Vector2 position;
         Vector2 size;
         Vector2 inputDirection;
         Rectangle collision;
+
+        // Player status
+        int maxHealth;
+        int currentHealth;
+
+        // Shooting
         std::vector<Bullet> bullets;
         float shootCooldown;
         float fireRate;
+
         Player(int width, int height, float x , float y){
             position.x = x;
             position.y = y;
@@ -69,6 +98,8 @@ class Player{
             size.y = height;
             shootCooldown = 0;
             fireRate = 0.2f; // Seconds between shots
+            maxHealth = 3;
+            currentHealth = maxHealth;
         }
 
         void Update(){
@@ -93,7 +124,7 @@ class Player{
             }
 
             // Shooting cooldown
-            shootCooldown -= GetFrameTime();
+            shootCooldown -= GetFrameTime() * TimeScale::Get();
             if (shootCooldown < 0) shootCooldown = 0;
             
             // Shooting
@@ -114,13 +145,24 @@ class Player{
                 [](Bullet& b) { return !b.active; }), bullets.end());
 
             // Update position
-            Vector2 velocity = Vector2Scale(inputDirection, VELOCITY * GetFrameTime() * TIMESCALE);
+            Vector2 velocity = Vector2Scale(inputDirection, VELOCITY * GetFrameTime() * TimeScale::Get());
             position = Vector2Add(position, velocity);
             position = Vector2Clamp(position, {0, 0}, {GetScreenWidth() - size.x, GetScreenHeight() - size.y});
 
             // Update collision box
             collision.x = position.x;
             collision.y = position.y;
+        }
+
+        void OnCollision(){
+            if (currentHealth > 0){
+                currentHealth--;
+                std::cout << "Player Health: " << currentHealth << std::endl;
+            } else {
+                TimeScale::Set(0);
+                isGameOver = true;
+                std::cout << "Player Defeated!" << std::endl;
+            }
         }
 
         void Draw(){
@@ -130,8 +172,6 @@ class Player{
             }
         }
 };
-
-
 
 class Enemy{
     public:
@@ -149,13 +189,13 @@ class Enemy{
             collision.height = 30;
             size.x = 30;
             size.y = 30;
-            speed = 100;
+            speed = 200;
             active = true;
         }
         void Update(){
             if(active){
                 // Move downward
-                position.y += speed * GetFrameTime();
+                position.y += speed * GetFrameTime() * TimeScale::Get();
 
                 // Update collision box
                 collision.y = position.y;
@@ -164,6 +204,12 @@ class Enemy{
                 if(position.y > GetScreenHeight()){
                     active = false;
                 }
+            }
+        }
+
+        void OnCollision(){
+            if (active){
+                active = false;
             }
         }
 
@@ -191,7 +237,7 @@ class Enemy{
         }
         void Update(){
             // Spawning cooldown
-            spawnCooldown -= GetFrameTime();
+            spawnCooldown -= GetFrameTime() * TimeScale::Get();
             if (spawnCooldown < 0) spawnCooldown = 0;
             
             // Spawning
@@ -235,8 +281,9 @@ class Enemy{
         public:
             static void CheckCollisionPlayerEnemy(Player& player, vector<Enemy>& enemies){
                 for(auto& enemy : enemies){
-                    if(enemy.active && CheckCollisionRecs(player.collision, enemy.collision)){
-                        enemy.active = false;
+                    if(CheckCollisionRecs(player.collision, enemy.collision)){
+                        player.OnCollision();
+                        enemy.OnCollision();
                         std::cout << "Collision Detected!" << std::endl;
                     }
                 }
@@ -245,9 +292,9 @@ class Enemy{
             static void CheckCollisionBulletEnemy(vector<Bullet>& bullets, vector<Enemy>& enemies){
                 for(auto& bullet : bullets){
                     for(auto& enemy : enemies){
-                        if(bullet.active && enemy.active && CheckCollisionRecs(bullet.collision, enemy.collision)){
-                            bullet.active = false;
-                            enemy.active = false;
+                        if(CheckCollisionRecs(bullet.collision, enemy.collision)){
+                            bullet.OnCollision();
+                            enemy.OnCollision();
                             std::cout << "Bullet hit Enemy!" << std::endl;
                         }
                     }
@@ -264,19 +311,25 @@ class Enemy{
         
         while (!WindowShouldClose()) {
             // Update game state
-            player.Update();
-            spawner.Update();
-
-            // Check collisions
-            CollisionSystem::CheckCollisionPlayerEnemy(player, spawner.enemies);
-            CollisionSystem::CheckCollisionBulletEnemy(player.bullets, spawner.enemies);
+            if (isGameOver){
+                DrawText("Game Over!", GetScreenWidth() / 2 - MeasureText("Game Over!", 40) / 2, GetScreenHeight() / 2 - 20, 40, BLACK);
+            } else {
+                player.Update();
+                spawner.Update();
+                
+                // Check collisions
+                CollisionSystem::CheckCollisionPlayerEnemy(player, spawner.enemies);
+                CollisionSystem::CheckCollisionBulletEnemy(player.bullets, spawner.enemies);
+            }
             
             BeginDrawing();
             ClearBackground(RAYWHITE);
 
             // Draw game elements
             player.Draw();
-            spawner.Draw();  
+            spawner.Draw();
+
+
             EndDrawing();
         }
         
