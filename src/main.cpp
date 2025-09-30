@@ -43,6 +43,22 @@ class EventSystem{
         std::unordered_map<std::string, std::vector<Callback>> listeners;
 };
 
+class GameState{
+    public:
+        bool isGameOver;
+        int score = 0;
+
+        void RegisterEvents(EventSystem* es){
+            es->Subscribe("OnPlayerDied", [this]() {
+                this->isGameOver = true;
+            });
+            es->Subscribe("OnEnemyDestroyed", [this]() {
+                this->score += 100;
+            });
+        }
+
+};
+
 TimeScale TIMESCALE(1);
 class Bullet{
     public:
@@ -186,7 +202,7 @@ class Player{
                 std::cout << "Player Health: " << currentHealth << std::endl;
             } else {
                 if(eventSystem){
-                    eventSystem->Emit("GameOver");
+                    eventSystem->Emit("OnPlayerDied");
                 }
                 TimeScale::Set(0);
                 std::cout << "Player Defeated!" << std::endl;
@@ -208,7 +224,8 @@ class Enemy{
     Rectangle collision;
     float speed;
     bool active;
-    Enemy(float x, float y){
+    EventSystem* eventSystem;
+    Enemy(float x, float y, EventSystem* es){
             position.x = x;
             position.y = y;
             collision.x = x;
@@ -219,6 +236,7 @@ class Enemy{
             size.y = 30;
             speed = 200;
             active = true;
+            eventSystem = es;
         }
         void Update(){
             if(active){
@@ -237,6 +255,7 @@ class Enemy{
 
         void OnCollision(){
             if (active){
+                eventSystem->Emit("OnEnemyDestroyed");
                 active = false;
             }
         }
@@ -256,12 +275,14 @@ class Enemy{
         int spawnCount = 0;
         int maxEnemies;
         std::vector<Enemy> enemies;
-        Spawner(float x, float y){
+        EventSystem* eventSystem;
+        Spawner(float x, float y, EventSystem* es){
             position.x = x;
             position.y = y;
             spawnCooldown = 0;
             spawnRate = 0.7f; // Seconds between spawns
             maxEnemies = 5;
+            eventSystem = es;
         }
         void Update(){
             // Spawning cooldown
@@ -270,7 +291,7 @@ class Enemy{
             
             // Spawning
             if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
-                Enemy newEnemy(position.x, position.y);
+                Enemy newEnemy(position.x, position.y, eventSystem);
                 newEnemy.active = true;
                 enemies.push_back(newEnemy);
                 spawnCooldown = spawnRate;
@@ -332,16 +353,17 @@ class Enemy{
 class UISystem{
     public:
         bool isGameOver;
-        void RegisterEvents(EventSystem* es){
-            es->Subscribe("GameOver", [this]() {
-                this->isGameOver = true;
-            });
+        GameState* gameState;
+
+        UISystem(GameState* gs){
+            isGameOver = false;
+            gameState = gs;
         }
 
         void Draw(){
             // TODO: Add placeholder for UI elements like health bar, score, etc.
             DrawText("Health: ", 10, 10, 20, BLACK);
-            DrawText("Score: 0", 10, 40, 20, BLACK);
+            DrawText(TextFormat("Score : %i", gameState->score), 10, 40, 20, BLACK);
 
             if(isGameOver){
                 const char* msg = "GAME OVER!";
@@ -358,11 +380,12 @@ class UISystem{
 int main() {
     InitWindow(600, 900, "Jet Game");
     SetTargetFPS(60);
+    GameState gameState;
     EventSystem eventSystem;
     Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, &eventSystem);
-    Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30);
-    UISystem ui;
-    ui.RegisterEvents(&eventSystem);
+    Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30, &eventSystem);
+    UISystem ui = UISystem(&gameState);
+    gameState.RegisterEvents(&eventSystem);
 
     std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
     
