@@ -72,14 +72,12 @@ void Player::Update() {
 
 void Player::OnCollision() {
     if (currentHealth > 1) {
-        currentHealth--;
-        std::cout << "Player Health: " << currentHealth << std::endl;
+        eventSystem->Emit("OnPlayerHit");
     } else {
         if(eventSystem) {
             eventSystem->Emit("OnPlayerDied");
         }
         TimeScale::Set(0);
-        std::cout << "Player Defeated!" << std::endl;
     }
 }
 

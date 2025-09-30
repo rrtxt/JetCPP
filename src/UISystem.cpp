@@ -1,14 +1,19 @@
 #include "UISystem.h"
+#include "HealthBarUI.h"
 
-UISystem::UISystem(GameState* gs) {
+UISystem::UISystem(GameState* gs)
+    : gameState(gs),
+      healthBar(gs->playerHealth)
+{
     isGameOver = false;
-    gameState = gs;
 }
 
 void UISystem::Draw() {
     // TODO: Add placeholder for UI elements like health bar, score, etc.
-    DrawText("Health: ", 10, 10, 20, BLACK);
-    DrawText(TextFormat("Score : %i", gameState->score), 10, 40, 20, BLACK);
+    healthBar.Draw(gameState->playerCurrentHealth);
+    const char* scoreMsg = TextFormat("%i", gameState->score);
+    int scoreMsgWidth = MeasureText(scoreMsg, 30);
+    DrawText(scoreMsg, GetScreenWidth() / 2 - scoreMsgWidth / 2, 30, 30, BLACK);
     isGameOver = gameState->isGameOver;
 
     if(isGameOver) {

@@ -17,6 +17,7 @@ int main() {
     Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, &eventSystem);
     Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30, &eventSystem);
     UISystem ui = UISystem(&gameState);
+    gameState = GameState(false, 0, player.maxHealth);
     gameState.RegisterEvents(&eventSystem);
 
     std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
