@@ -3,6 +3,7 @@
 #include "iostream"
 #include "vector"
 #include "algorithm"
+#include "functional"
 
 using namespace std;
 
@@ -21,6 +22,26 @@ class TimeScale {
 };
 
 int TimeScale::timescale = 1;
+
+class EventSystem{
+    public:
+    using Callback = std::function<void()>;
+    
+    void Subscribe(const std::string& eventName, Callback callback) {
+        listeners[eventName].push_back(callback);
+    }
+    
+    void Emit(const std::string& eventName) {
+        if (listeners.find(eventName) != listeners.end()) {
+            for (const auto& callback : listeners[eventName]) {
+                callback();
+            }
+        }
+    }
+
+    private:
+        std::unordered_map<std::string, std::vector<Callback>> listeners;
+};
 
 TimeScale TIMESCALE(1);
 class Bullet{
@@ -87,7 +108,10 @@ class Player{
         float shootCooldown;
         float fireRate;
 
-        Player(int width, int height, float x , float y){
+        // Events
+        EventSystem* eventSystem;
+
+        Player(int width, int height, float x , float y, EventSystem* es){
             position.x = x;
             position.y = y;
             collision.x = x;
@@ -100,6 +124,8 @@ class Player{
             fireRate = 0.2f; // Seconds between shots
             maxHealth = 3;
             currentHealth = maxHealth;
+
+            eventSystem = es;
         }
 
         void Update(){
@@ -159,8 +185,10 @@ class Player{
                 currentHealth--;
                 std::cout << "Player Health: " << currentHealth << std::endl;
             } else {
+                if(eventSystem){
+                    eventSystem->Emit("GameOver");
+                }
                 TimeScale::Set(0);
-                isGameOver = true;
                 std::cout << "Player Defeated!" << std::endl;
             }
         }
@@ -232,7 +260,7 @@ class Enemy{
             position.x = x;
             position.y = y;
             spawnCooldown = 0;
-            spawnRate = 1.0f; // Seconds between spawns
+            spawnRate = 0.7f; // Seconds between spawns
             maxEnemies = 5;
         }
         void Update(){
@@ -301,41 +329,67 @@ class Enemy{
                 }
             }
     };
-    
-    int main() {
-        InitWindow(600, 900, "Jet Game");
-        SetTargetFPS(60);
-        Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2);
-        Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30);
-        std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
-        
-        while (!WindowShouldClose()) {
-            // Update game state
-            if (isGameOver){
-                DrawText("Game Over!", GetScreenWidth() / 2 - MeasureText("Game Over!", 40) / 2, GetScreenHeight() / 2 - 20, 40, BLACK);
-            } else {
-                player.Update();
-                spawner.Update();
-                
-                // Check collisions
-                CollisionSystem::CheckCollisionPlayerEnemy(player, spawner.enemies);
-                CollisionSystem::CheckCollisionBulletEnemy(player.bullets, spawner.enemies);
+class UISystem{
+    public:
+        bool isGameOver;
+        void RegisterEvents(EventSystem* es){
+            es->Subscribe("GameOver", [this]() {
+                this->isGameOver = true;
+            });
+        }
+
+        void Draw(){
+            // TODO: Add placeholder for UI elements like health bar, score, etc.
+            DrawText("Health: ", 10, 10, 20, BLACK);
+            DrawText("Score: 0", 10, 40, 20, BLACK);
+
+            if(isGameOver){
+                const char* msg = "GAME OVER!";
+                int fontSize = 40;
+                int textWidth = MeasureText(msg, fontSize);
+                DrawText(msg,
+                    GetScreenWidth()/2 - textWidth/2,
+                    GetScreenHeight()/2 - fontSize/2,
+                    fontSize, BLACK);
             }
+        }
+};
+    
+int main() {
+    InitWindow(600, 900, "Jet Game");
+    SetTargetFPS(60);
+    EventSystem eventSystem;
+    Player player = Player(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, &eventSystem);
+    Spawner spawner = Spawner(GetScreenWidth() / 2 - 15, -30);
+    UISystem ui;
+    ui.RegisterEvents(&eventSystem);
+
+    std::cout << "Initial Player Position : " << player.position.x << ", " << player.position.y << std::endl;
+    
+    while (!WindowShouldClose()) {
+        if (!ui.isGameOver){
+            // Update game state
+            player.Update();
+            spawner.Update();
             
-            BeginDrawing();
-            ClearBackground(RAYWHITE);
-
-            // Draw game elements
-            player.Draw();
-            spawner.Draw();
-
-
-            EndDrawing();
+            // Check collisions
+            CollisionSystem::CheckCollisionPlayerEnemy(player, spawner.enemies);
+            CollisionSystem::CheckCollisionBulletEnemy(player.bullets, spawner.enemies);            
         }
         
-        CloseWindow();
-        return 0;                                                                                                                                                              
-    }
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        
+        // Draw game elements
+        player.Draw();
+        spawner.Draw();
+        
+        ui.Draw();
+        EndDrawing();
+    }        
+    CloseWindow();
+    return 0;                                                                                                                                                              
+}
     
     
     
