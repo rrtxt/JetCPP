@@ -11,18 +11,64 @@ const int VELOCITY = 200;
 bool isGameOver = false;
 class TimeScale {
     private:
-        static int timescale;
+    static int timescale;
     public:
-        TimeScale(int initial = 1) { timescale = initial; }
-        static int Get() { return timescale; }
-        static void Set(int value) { 
-            if(value < 0) value = 0;
-            timescale = value;
-        }
+    TimeScale(int initial = 1) { timescale = initial; }
+    static int Get() { return timescale; }
+    static void Set(int value) { 
+        if(value < 0) value = 0;
+        timescale = value;
+    }
 };
 
 int TimeScale::timescale = 1;
 
+class Enemy{
+    public:
+    Vector2 position;
+    Vector2 size;
+    Rectangle collision;
+    float speed;
+    bool active;
+    Enemy(float x, float y){
+            position.x = x;
+            position.y = y;
+            collision.x = x;
+            collision.y = y;
+            collision.width = 30;
+            collision.height = 30;
+            size.x = 30;
+            size.y = 30;
+            speed = 200;
+            active = true;
+        }
+        void Update(){
+            if(active){
+                // Move downward
+                position.y += speed * GetFrameTime() * TimeScale::Get();
+
+                // Update collision box
+                collision.y = position.y;
+                
+                // Set inactive if off-screen
+                if(position.y > GetScreenHeight()){
+                    active = false;
+                }
+            }
+        }
+
+        void OnCollision(){
+            if (active){
+                active = false;
+            }
+        }
+
+        void Draw(){
+            if(active){
+                DrawRectangle(position.x, position.y, size.x, size.y, BLUE);
+            }
+        }
+};
 class EventSystem{
     public:
     using Callback = std::function<void()>;
@@ -45,7 +91,7 @@ class EventSystem{
 
 class GameState{
     public:
-        bool isGameOver;
+        bool isGameOver = false;
         int score = 0;
 
         void RegisterEvents(EventSystem* es){
@@ -56,10 +102,8 @@ class GameState{
                 this->score += 100;
             });
         }
-
 };
 
-TimeScale TIMESCALE(1);
 class Bullet{
     public:
         Vector2 position;
@@ -68,7 +112,8 @@ class Bullet{
         int width;
         int height;
         bool active;
-        Bullet(float x, float y){
+        EventSystem* eventSystem;
+        Bullet(float x, float y, EventSystem* es){
             position.x = x;
             position.y = y;
             collision.x = x;
@@ -78,6 +123,7 @@ class Bullet{
             collision.width = width;
             collision.height = height;
             speed = 350;
+            eventSystem = es;
         }
         void Update(){
             if(active){
@@ -94,9 +140,13 @@ class Bullet{
             }
         }
 
-        void OnCollision(){
-            if (active){
-                active = false;
+        void OnCollision(Enemy& enemy){
+            if (active && enemy.active){
+                active = false; 
+
+                if(eventSystem){
+                    eventSystem->Emit("OnEnemyDestroyed");
+                }
             }
         }
 
@@ -171,7 +221,7 @@ class Player{
             
             // Shooting
             if (IsKeyDown(KEY_SPACE) && shootCooldown <= 0) {
-                Bullet newBullet(position.x + size.x / 2 - 2.5f, position.y);
+                Bullet newBullet(position.x + size.x / 2 - 2.5f, position.y, eventSystem);
                 newBullet.active = true;
                 bullets.push_back(newBullet);
                 shootCooldown = fireRate;
@@ -197,7 +247,7 @@ class Player{
         }
 
         void OnCollision(){
-            if (currentHealth > 0){
+            if (currentHealth > 1){
                 currentHealth--;
                 std::cout << "Player Health: " << currentHealth << std::endl;
             } else {
@@ -213,56 +263,6 @@ class Player{
             DrawRectangle(position.x, position.y, size.x, size.y, RED);
             for(auto& bullet : bullets){
                 bullet.Draw();
-            }
-        }
-};
-
-class Enemy{
-    public:
-    Vector2 position;
-    Vector2 size;
-    Rectangle collision;
-    float speed;
-    bool active;
-    EventSystem* eventSystem;
-    Enemy(float x, float y, EventSystem* es){
-            position.x = x;
-            position.y = y;
-            collision.x = x;
-            collision.y = y;
-            collision.width = 30;
-            collision.height = 30;
-            size.x = 30;
-            size.y = 30;
-            speed = 200;
-            active = true;
-            eventSystem = es;
-        }
-        void Update(){
-            if(active){
-                // Move downward
-                position.y += speed * GetFrameTime() * TimeScale::Get();
-
-                // Update collision box
-                collision.y = position.y;
-                
-                // Set inactive if off-screen
-                if(position.y > GetScreenHeight()){
-                    active = false;
-                }
-            }
-        }
-
-        void OnCollision(){
-            if (active){
-                eventSystem->Emit("OnEnemyDestroyed");
-                active = false;
-            }
-        }
-
-        void Draw(){
-            if(active){
-                DrawRectangle(position.x, position.y, size.x, size.y, BLUE);
             }
         }
 };
@@ -291,7 +291,7 @@ class Enemy{
             
             // Spawning
             if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
-                Enemy newEnemy(position.x, position.y, eventSystem);
+                Enemy newEnemy(position.x, position.y);
                 newEnemy.active = true;
                 enemies.push_back(newEnemy);
                 spawnCooldown = spawnRate;
@@ -342,7 +342,7 @@ class Enemy{
                 for(auto& bullet : bullets){
                     for(auto& enemy : enemies){
                         if(CheckCollisionRecs(bullet.collision, enemy.collision)){
-                            bullet.OnCollision();
+                            bullet.OnCollision(enemy);
                             enemy.OnCollision();
                             std::cout << "Bullet hit Enemy!" << std::endl;
                         }
@@ -364,6 +364,7 @@ class UISystem{
             // TODO: Add placeholder for UI elements like health bar, score, etc.
             DrawText("Health: ", 10, 10, 20, BLACK);
             DrawText(TextFormat("Score : %i", gameState->score), 10, 40, 20, BLACK);
+            isGameOver = gameState->isGameOver;
 
             if(isGameOver){
                 const char* msg = "GAME OVER!";
