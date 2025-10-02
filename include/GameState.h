@@ -10,7 +10,7 @@ public:
 
     // Player state
     int playerHealth;
-    int playerCurrentHealth ;
+    int playerCurrentHealth;
 
     GameState(bool isGameOver = false, int score = 0,int playerHealth = 3)
         : isGameOver(isGameOver), score(score), playerHealth(playerHealth), playerCurrentHealth(playerHealth) {}

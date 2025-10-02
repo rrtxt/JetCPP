@@ -17,7 +17,7 @@ void Spawner::Update() {
     
     // Spawning
     if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
-        Enemy newEnemy(position.x, position.y);
+        Enemy newEnemy(position.x + GetRandomValue(-10, 10), position.y);
         newEnemy.active = true;
         enemies.push_back(newEnemy);
         spawnCooldown = spawnRate;

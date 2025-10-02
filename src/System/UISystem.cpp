@@ -9,7 +9,7 @@ UISystem::UISystem(GameState* gs)
 }
 
 void UISystem::Draw() {
-    // TODO: Add placeholder for UI elements like health bar, score, etc.
+    // TODO: Add for Main Menu
     healthBar.Draw(gameState->playerCurrentHealth);
     const char* scoreMsg = TextFormat("%i", gameState->score);
     int scoreMsgWidth = MeasureText(scoreMsg, 30);
