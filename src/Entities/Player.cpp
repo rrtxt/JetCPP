@@ -22,16 +22,16 @@ void Player::Update() {
     // Movement
     inputDirection = {0, 0};
     if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-        inputDirection.y -= 1;
+        inputDirection.y = -1;
     }
     if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
-        inputDirection.y += 1;
+        inputDirection.y = 1;
     }
     if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-        inputDirection.x += 1;
+        inputDirection.x = 1;
     }
     if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-        inputDirection.x -= 1;
+        inputDirection.x = -1;
     }
 
     // Normalize diagonal movement

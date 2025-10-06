@@ -5,6 +5,14 @@
 
 class GameState {
 public:
+    // Scene state
+    enum Scene {
+        MAIN_MENU,
+        IN_GAME,
+    } scene = MAIN_MENU;
+    int selectedMenuOption = 0;
+
+    // Game state
     bool isGameOver;
     int score;
 

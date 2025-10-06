@@ -9,10 +9,10 @@ file(GLOB_RECURSE SRC_MAIN src/*.cpp)
 # Create the executable
 add_executable(raylib_jet_cpp
     ${SRC_MAIN}
-    ${SRC_CORE}
-    ${SRC_ENTITIES}
-    ${SRC_SYSTEMS}
-    ${SRC_UI}
+    # ${SRC_CORE}
+    # ${SRC_ENTITIES}
+    # ${SRC_SYSTEMS}
+    # ${SRC_UI}
 )
 
 # Tell CMake where to find *your* headers
