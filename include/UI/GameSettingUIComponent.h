@@ -40,7 +40,8 @@ private:
         DIFFICULTY = 1,
         CONTROLS = 2,
         GRAPHICS = 3,
-        SETTING_COUNT = 4
+        BACK_BUTTON = 4,
+        SETTING_COUNT = 5
     };
     
     // Visual properties

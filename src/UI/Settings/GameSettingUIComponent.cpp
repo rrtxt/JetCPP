@@ -8,7 +8,7 @@ GameSettingUIComponent::GameSettingUIComponent(GameState* gameState, EventSystem
     settingFontSize = 24;
     settingSpacing = 80;
     titleColor = BLACK;
-    selectedColor = YELLOW;
+    selectedColor = GREEN;
     normalColor = BLACK;
     valueColor = GREEN;
     backgroundColor = WHITE;
@@ -55,7 +55,8 @@ void GameSettingUIComponent::DrawSettings() {
     
     const char* settingLabels[] = {"Master Volume", "Difficulty", "Control Scheme", "Graphics Quality"};
     
-    for (int i = 0; i < SETTING_COUNT; i++) {
+    // Draw only the actual settings (exclude BACK_BUTTON from this loop)
+    for (int i = 0; i < BACK_BUTTON; i++) {
         Vector2 settingPos = {
             settingsStartPosition.x,
             settingsStartPosition.y + i * settingSpacing
@@ -158,20 +159,31 @@ void GameSettingUIComponent::DrawBackButton() {
         buttonHeight
     };
     
+    // Determine button color based on selection state and mouse hover
     Color buttonColor = DARKGRAY;
-    if (CheckCollisionPointRec(GetMousePosition(), backButtonRect)) {
+    Color textColor = WHITE;
+    Color borderColor = WHITE;
+    
+    bool isSelected = (selectedSettingIndex == BACK_BUTTON);
+    bool isMouseOver = CheckCollisionPointRec(GetMousePosition(), backButtonRect);
+    
+    if (isSelected) {
+        buttonColor = selectedColor;
+        textColor = BLACK;
+        borderColor = BLACK;
+    } else if (isMouseOver) {
         buttonColor = GRAY;
     }
     
     DrawRectangleRec(backButtonRect, buttonColor);
-    DrawRectangleLinesEx(backButtonRect, 2, WHITE);
+    DrawRectangleLinesEx(backButtonRect, 2, borderColor);
     
     const char* backText = "BACK TO MENU";
     int textWidth = MeasureText(backText, 20);
     DrawText(backText, 
         backButtonRect.x + backButtonRect.width / 2 - textWidth / 2,
         backButtonRect.y + backButtonRect.height / 2 - 10,
-        20, WHITE);
+        20, textColor);
 }
 
 void GameSettingUIComponent::HandleInput() {
@@ -190,13 +202,24 @@ void GameSettingUIComponent::HandleInput() {
         }
     }
     
-    // Modify selected setting with LEFT/RIGHT
-    if (IsKeyPressed(KEY_LEFT)) {
-        UpdateSelectedSetting(-0.1f);
+    // Handle ENTER key for back button
+    if (IsKeyPressed(KEY_ENTER)) {
+        if (selectedSettingIndex == BACK_BUTTON) {
+            ApplySettings();
+            eventSystem->Emit("ChangeToMainMenu");
+            return;
+        }
     }
     
-    if (IsKeyPressed(KEY_RIGHT)) {
-        UpdateSelectedSetting(0.1f);
+    // Modify selected setting with LEFT/RIGHT (only for actual settings, not back button)
+    if (selectedSettingIndex < BACK_BUTTON) {
+        if (IsKeyPressed(KEY_LEFT)) {
+            UpdateSelectedSetting(-0.1f);
+        }
+        
+        if (IsKeyPressed(KEY_RIGHT)) {
+            UpdateSelectedSetting(0.1f);
+        }
     }
     
     // Mouse interaction for volume slider
@@ -228,6 +251,9 @@ void GameSettingUIComponent::HandleInput() {
 }
 
 void GameSettingUIComponent::UpdateSelectedSetting(float delta) {
+    // Only update actual settings, not the back button
+    if (selectedSettingIndex >= BACK_BUTTON) return;
+    
     switch (selectedSettingIndex) {
         case VOLUME:
             gameState->settings.masterVolume = Clamp(gameState->settings.masterVolume + delta, 0.0f, 1.0f);
