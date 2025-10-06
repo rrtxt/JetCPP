@@ -23,6 +23,8 @@ struct GameSettings {
     float GetEnemySpeedMultiplier() const;
     int GetPlayerStartingHealth() const;
     float GetSpawnRateMultiplier() const;
+    float GetEnemyMaxSpawnCount() const;
+    float GetEnemySpawnSpread() const;
 };
 
 class GameState {

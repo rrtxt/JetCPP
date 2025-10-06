@@ -21,10 +21,28 @@ int GameSettings::GetPlayerStartingHealth() const {
 
 float GameSettings::GetSpawnRateMultiplier() const {
     switch (difficulty) {
-        case EASY: return 0.5f;
-        case NORMAL: return 1.0f;
-        case HARD: return 1.25f;
-        default: return 0.5f;
+        case EASY: return 1.0f;
+        case NORMAL: return 1.25f;
+        case HARD: return 1.6f;
+        default: return 1.0f;
+    }
+}
+
+float GameSettings::GetEnemyMaxSpawnCount() const {
+    switch (difficulty) {
+        case EASY: return 5;
+        case NORMAL: return 10;
+        case HARD: return 15;
+        default: return 5;
+    }
+}
+
+float GameSettings::GetEnemySpawnSpread() const {
+    switch (difficulty) {
+        case EASY: return 15;
+        case NORMAL: return 25;
+        case HARD: return 40;
+        default: return 15;
     }
 }
 

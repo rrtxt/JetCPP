@@ -11,4 +11,4 @@
 using namespace std;
 
 // Global constants
-const int VELOCITY = 200;
+const int VELOCITY = 300;

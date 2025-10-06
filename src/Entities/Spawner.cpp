@@ -6,10 +6,11 @@ Spawner::Spawner(float x, float y, EventSystem* es, GameState* gs) {
     position.y = y;
     spawnCooldown = 0;
     spawnRate = 0.7f; // Seconds between spawns
-    maxEnemies = 5;
     eventSystem = es;   
     gameState = gs;
+    maxEnemies =  gameState->settings.GetEnemyMaxSpawnCount();
     spawnRateMultiplier = gameState->settings.GetSpawnRateMultiplier();
+    spawnSpread = gameState->settings.GetEnemySpawnSpread();
 }
 
 void Spawner::Update() {
@@ -19,7 +20,7 @@ void Spawner::Update() {
     
     // Spawning
     if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
-        Enemy newEnemy(position.x + GetRandomValue(-10, 10), position.y, gameState);
+        Enemy newEnemy(position.x + GetRandomValue(-1 * spawnSpread, spawnSpread), position.y, gameState);
         newEnemy.active = true;
         enemies.push_back(newEnemy);
         spawnCooldown = spawnRate;

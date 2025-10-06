@@ -16,6 +16,7 @@ public:
     EventSystem* eventSystem;
     GameState* gameState;
     float spawnRateMultiplier;
+    float spawnSpread;
 
     Spawner(float x, float y, EventSystem* es, GameState* gs);
     void Update();
