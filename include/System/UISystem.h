@@ -26,6 +26,7 @@ public:
     // Scene-specific setup helpers
     void SetupInGameUI();
     void SetupMainMenuUI();
+    void SetupSettingsUI();
 
 private:
     GameState* gameState;

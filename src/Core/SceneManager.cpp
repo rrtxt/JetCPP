@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "MainMenuScene.h"
 #include "InGameScene.h"
+#include "SettingsScene.h"
 #include "TimeScale.h"
 
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem)
@@ -14,6 +15,10 @@ SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem)
     
     eventSystem->Subscribe("ChangeToInGame", [this]() {
         ChangeScene(GameState::IN_GAME);
+    });
+    
+    eventSystem->Subscribe("ChangeToSettings", [this]() {
+        ChangeScene(GameState::SETTINGS);
     });
     
     eventSystem->Subscribe("RestartGame", [this]() {
@@ -83,6 +88,8 @@ Scene* SceneManager::CreateScene(GameState::Scene sceneType) {
             return new MainMenuScene(gameState, eventSystem);
         case GameState::IN_GAME:
             return new InGameScene(gameState, eventSystem);
+        case GameState::SETTINGS:
+            return new SettingsScene(gameState, eventSystem);
         default:
             std::cout << "Warning: Unknown scene type!" << std::endl;
             return nullptr;

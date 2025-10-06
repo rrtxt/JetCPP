@@ -3,6 +3,7 @@
 #include "ScoreUIComponent.h"
 #include "GameOverUIComponent.h"
 #include "MainMenuUIComponent.h"
+#include "GameSettingUIComponent.h"
 
 UISystem::UISystem(GameState* gameState, EventSystem* eventSystem)
     : gameState(gameState), eventSystem(eventSystem) {
@@ -70,4 +71,15 @@ void UISystem::SetupMainMenuUI() {
     }
     
     std::cout << "Main menu UI setup complete with " << GetComponentCount() << " components" << std::endl;
+}
+
+void UISystem::SetupSettingsUI() {
+    ClearComponents();
+    
+    // Add settings UI components
+    if (eventSystem) {
+        AddComponent(std::make_unique<GameSettingUIComponent>(gameState, eventSystem));
+    }
+    
+    std::cout << "Settings UI setup complete with " << GetComponentCount() << " components" << std::endl;
 }

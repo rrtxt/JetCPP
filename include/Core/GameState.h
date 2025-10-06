@@ -9,6 +9,7 @@ public:
     enum Scene {
         MAIN_MENU,
         IN_GAME,
+        SETTINGS,
     } scene = MAIN_MENU;
     int selectedMenuOption = 0;
 

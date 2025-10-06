@@ -7,9 +7,9 @@ MainMenuUIComponent::MainMenuUIComponent(GameState* gameState, EventSystem* even
     titleFontSize = 60;
     optionFontSize = 20;
     optionSpacing = 50;
-    titleColor = WHITE;
+    titleColor = BLACK;
     selectedColor = RED;
-    normalColor = WHITE;
+    normalColor = BLACK;
     instructionColor = LIGHTGRAY;
 }
 
@@ -17,7 +17,7 @@ void MainMenuUIComponent::Draw() {
     if (!isVisible || !isEnabled) return;
     
     // Draw background
-    ClearBackground(DARKBLUE);
+    ClearBackground(WHITE);
     
     // Draw title
     const char* title = "JET GAME";
@@ -85,8 +85,8 @@ void MainMenuUIComponent::HandleMenuSelection() {
         case 0: // Start Game
             eventSystem->Emit("ChangeToInGame");
             break;
-        case 1: // Settings (future implementation)
-            std::cout << "Settings selected (not implemented yet)" << std::endl;
+        case 1: // Settings
+            eventSystem->Emit("ChangeToSettings");
             break;
         case 2: // Exit
             std::cout << "Exit selected" << std::endl;
