@@ -1,23 +1,25 @@
 #include "Spawner.h"
 #include "TimeScale.h"
 
-Spawner::Spawner(float x, float y, EventSystem* es) {
+Spawner::Spawner(float x, float y, EventSystem* es, GameState* gs) {
     position.x = x;
     position.y = y;
     spawnCooldown = 0;
     spawnRate = 0.7f; // Seconds between spawns
     maxEnemies = 5;
-    eventSystem = es;
+    eventSystem = es;   
+    gameState = gs;
+    spawnRateMultiplier = gameState->settings.GetSpawnRateMultiplier();
 }
 
 void Spawner::Update() {
     // Spawning cooldown
-    spawnCooldown -= GetFrameTime() * TimeScale::Get();
+    spawnCooldown -= GetFrameTime() * TimeScale::Get() * spawnRateMultiplier;
     if (spawnCooldown < 0) spawnCooldown = 0;
     
     // Spawning
     if (spawnCooldown <= 0 && spawnCount < maxEnemies) {
-        Enemy newEnemy(position.x + GetRandomValue(-10, 10), position.y);
+        Enemy newEnemy(position.x + GetRandomValue(-10, 10), position.y, gameState);
         newEnemy.active = true;
         enemies.push_back(newEnemy);
         spawnCooldown = spawnRate;

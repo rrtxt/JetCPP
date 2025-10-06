@@ -62,15 +62,18 @@ void InGameScene::OnExit() {
 }
 
 void InGameScene::InitializeGame() {
-    // Create game entities
+    // Create game entities with settings applied
     player = std::make_unique<Player>(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
-    spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, eventSystem);
+    spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, eventSystem, gameState);
     uiSystem = std::make_unique<UISystem>(gameState, eventSystem);
+    
+    // Apply game settings to entities
+    ApplyGameSettings();
     
     // Setup in-game UI components
     uiSystem->SetupInGameUI();
     
-    std::cout << "Game initialized - Player at: " << player->position.x << ", " << player->position.y << std::endl;
+    std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
 }
 
 void InGameScene::UpdateGameLogic() {
@@ -95,4 +98,22 @@ void InGameScene::HandleGameOver() {
         // Return to main menu
         eventSystem->Emit("ChangeToMainMenu");
     }
+}
+
+void InGameScene::ApplyGameSettings() {
+    if (!player || !spawner) return;
+    
+    const GameSettings& settings = gameState->settings;
+    
+    // Apply difficulty settings to player
+    player->maxHealth = settings.GetPlayerStartingHealth();
+    player->currentHealth = player->maxHealth;
+    
+    std::cout << "Applied game settings:" << std::endl;
+    std::cout << "  Difficulty: " << (settings.difficulty == GameSettings::EASY ? "Easy" : 
+                                     settings.difficulty == GameSettings::NORMAL ? "Normal" : "Hard") << std::endl;
+    std::cout << "  Player Health: " << player->maxHealth << std::endl;
+    std::cout << "  Enemy Speed Multiplier: " << settings.GetEnemySpeedMultiplier() << std::endl;
+    std::cout << "  Control Scheme: " << (settings.controlScheme == GameSettings::WASD ? "WASD" : "Arrow Keys") << std::endl;
+    std::cout << "  Master Volume: " << (settings.masterVolume * 100) << "%" << std::endl;
 }

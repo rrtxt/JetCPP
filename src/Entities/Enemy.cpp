@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "TimeScale.h"
 
-Enemy::Enemy(float x, float y) {
+Enemy::Enemy(float x, float y, GameState* gs) {
     position.x = x;
     position.y = y;
     collision.x = x;
@@ -12,12 +12,15 @@ Enemy::Enemy(float x, float y) {
     size.y = 30;
     speed = 200;
     active = true;
+
+    gameState = gs;
+    speedMultiplier = gameState->settings.GetEnemySpeedMultiplier();
 }
 
 void Enemy::Update() {
     if(active) {
-        // Move downward
-        position.y += speed * GetFrameTime() * TimeScale::Get();
+        // Multiply speed by enemy speed multiplier from game settings
+        position.y += speed * speedMultiplier * GetFrameTime() * TimeScale::Get();
 
         // Update collision box
         collision.y = position.y;

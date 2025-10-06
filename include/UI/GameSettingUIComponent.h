@@ -31,9 +31,17 @@ private:
     GameState* gameState;
     EventSystem* eventSystem;
     
-    // Settings data
-    std::vector<SettingItem> settings;
+    // UI state
     int selectedSettingIndex;
+    
+    // Setting categories for navigation
+    enum SettingCategory {
+        VOLUME = 0,
+        DIFFICULTY = 1,
+        CONTROLS = 2,
+        GRAPHICS = 3,
+        SETTING_COUNT = 4
+    };
     
     // Visual properties
     Vector2 titlePosition;
@@ -54,14 +62,15 @@ private:
     float buttonHeight;
     
     // Methods
-    void InitializeSettings();
     void HandleInput();
     void DrawTitle();
     void DrawSettings();
-    void DrawSlider(const SettingItem& setting, Vector2 position);
-    void DrawDropdown(const SettingItem& setting, Vector2 position);
+    void DrawVolumeSlider(Vector2 position);
+    void DrawDifficultyDropdown(Vector2 position);
+    void DrawControlsDropdown(Vector2 position);
+    void DrawGraphicsDropdown(Vector2 position);
     void DrawBackButton();
-    void UpdateSettingValue(int settingIndex, float delta);
+    void UpdateSelectedSetting(float delta);
     void ApplySettings();
     void ResetToDefaults();
     

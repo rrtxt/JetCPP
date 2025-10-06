@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.h"
+#include "GameState.h"
 
 class Enemy {
 public:
@@ -9,8 +10,10 @@ public:
     Rectangle collision;
     float speed;
     bool active;
+    GameState* gameState;
+    float speedMultiplier;
 
-    Enemy(float x, float y);
+    Enemy(float x, float y, GameState* gs);
     void Update();
     void OnCollision();
     void Draw();

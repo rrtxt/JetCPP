@@ -18,57 +18,10 @@ GameSettingUIComponent::GameSettingUIComponent(GameState* gameState, EventSystem
     sliderHeight = 20;
     buttonWidth = 200;
     buttonHeight = 40;
-    
-    InitializeSettings();
 }
 
-void GameSettingUIComponent::InitializeSettings() {
-    settings.clear();
-    
-    // Master Volume
-    settings.push_back({
-        "Master Volume",
-        SettingType::VOLUME,
-        0.7f,  // current value
-        0.0f,  // min
-        1.0f,  // max
-        {},    // no options for slider
-        0      // selectedOption (unused for sliders)
-    });
-    
-    // Difficulty
-    settings.push_back({
-        "Difficulty",
-        SettingType::DIFFICULTY,
-        1.0f,  // current value (index)
-        0.0f,  // min
-        2.0f,  // max
-        {"Easy", "Normal", "Hard"},  // options
-        1      // selectedOption (Normal)
-    });
-    
-    // Controls
-    settings.push_back({
-        "Control Scheme",
-        SettingType::CONTROLS,
-        0.0f,  // current value (index)
-        0.0f,  // min
-        1.0f,  // max
-        {"WASD", "Arrow Keys"},  // options
-        0      // selectedOption (WASD)
-    });
-    
-    // Graphics Quality
-    settings.push_back({
-        "Graphics Quality",
-        SettingType::GRAPHICS,
-        1.0f,  // current value (index)
-        0.0f,  // min
-        2.0f,  // max
-        {"Low", "Medium", "High"},  // options
-        1      // selectedOption (Medium)
-    });
-}
+// Removed InitializeSettings - no longer needed!
+// We work directly with gameState->settings now
 
 void GameSettingUIComponent::Draw() {
     if (!isVisible || !isEnabled) return;
@@ -100,7 +53,9 @@ void GameSettingUIComponent::DrawSettings() {
     settingsStartPosition.x = GetScreenWidth() / 2 - 200;
     settingsStartPosition.y = titlePosition.y + titleFontSize + 60;
     
-    for (int i = 0; i < settings.size(); i++) {
+    const char* settingLabels[] = {"Master Volume", "Difficulty", "Control Scheme", "Graphics Quality"};
+    
+    for (int i = 0; i < SETTING_COUNT; i++) {
         Vector2 settingPos = {
             settingsStartPosition.x,
             settingsStartPosition.y + i * settingSpacing
@@ -108,22 +63,31 @@ void GameSettingUIComponent::DrawSettings() {
         
         // Draw setting label
         Color labelColor = (i == selectedSettingIndex) ? selectedColor : normalColor;
-        DrawText(settings[i].label.c_str(), settingPos.x, settingPos.y, settingFontSize, labelColor);
+        DrawText(settingLabels[i], settingPos.x, settingPos.y, settingFontSize, labelColor);
         
         // Draw setting control based on type
         Vector2 controlPos = {settingPos.x, settingPos.y + 30};
         
-        if (settings[i].type == SettingType::VOLUME) {
-            DrawSlider(settings[i], controlPos);
-        } else {
-            DrawDropdown(settings[i], controlPos);
+        switch (i) {
+            case VOLUME:
+                DrawVolumeSlider(controlPos);
+                break;
+            case DIFFICULTY:
+                DrawDifficultyDropdown(controlPos);
+                break;
+            case CONTROLS:
+                DrawControlsDropdown(controlPos);
+                break;
+            case GRAPHICS:
+                DrawGraphicsDropdown(controlPos);
+                break;
         }
     }
 }
 
-void GameSettingUIComponent::DrawSlider(const SettingItem& setting, Vector2 position) {
+void GameSettingUIComponent::DrawVolumeSlider(Vector2 position) {
     Rectangle sliderRect = GetSliderRect(position);
-    Rectangle handleRect = GetSliderHandleRect(position, setting.value, setting.minValue, setting.maxValue);
+    Rectangle handleRect = GetSliderHandleRect(position, gameState->settings.masterVolume, 0.0f, 1.0f);
     
     // Draw slider track
     DrawRectangleRec(sliderRect, DARKGRAY);
@@ -134,11 +98,11 @@ void GameSettingUIComponent::DrawSlider(const SettingItem& setting, Vector2 posi
     DrawRectangleLinesEx(handleRect, 2, WHITE);
     
     // Draw value text
-    const char* valueText = TextFormat("%.0f%%", setting.value * 100);
+    const char* valueText = TextFormat("%.0f%%", gameState->settings.masterVolume * 100);
     DrawText(valueText, position.x + sliderWidth + 20, position.y, settingFontSize, valueColor);
 }
 
-void GameSettingUIComponent::DrawDropdown(const SettingItem& setting, Vector2 position) {
+void GameSettingUIComponent::DrawDifficultyDropdown(Vector2 position) {
     Rectangle dropdownRect = {position.x, position.y, sliderWidth, sliderHeight};
     
     // Draw dropdown background
@@ -146,10 +110,41 @@ void GameSettingUIComponent::DrawDropdown(const SettingItem& setting, Vector2 po
     DrawRectangleLinesEx(dropdownRect, 2, WHITE);
     
     // Draw current selection
-    if (setting.selectedOption < setting.options.size()) {
-        const char* selectedText = setting.options[setting.selectedOption].c_str();
-        DrawText(selectedText, position.x + 10, position.y + 2, settingFontSize - 4, valueColor);
-    }
+    const char* difficultyNames[] = {"Easy", "Normal", "Hard"};
+    const char* selectedText = difficultyNames[gameState->settings.difficulty];
+    DrawText(selectedText, position.x + 10, position.y + 2, settingFontSize - 4, valueColor);
+    
+    // Draw dropdown arrow
+    DrawText("v", position.x + sliderWidth - 25, position.y + 2, settingFontSize - 4, WHITE);
+}
+
+void GameSettingUIComponent::DrawControlsDropdown(Vector2 position) {
+    Rectangle dropdownRect = {position.x, position.y, sliderWidth, sliderHeight};
+    
+    // Draw dropdown background
+    DrawRectangleRec(dropdownRect, DARKGRAY);
+    DrawRectangleLinesEx(dropdownRect, 2, WHITE);
+    
+    // Draw current selection
+    const char* controlNames[] = {"WASD", "Arrow Keys"};
+    const char* selectedText = controlNames[gameState->settings.controlScheme];
+    DrawText(selectedText, position.x + 10, position.y + 2, settingFontSize - 4, valueColor);
+    
+    // Draw dropdown arrow
+    DrawText("v", position.x + sliderWidth - 25, position.y + 2, settingFontSize - 4, WHITE);
+}
+
+void GameSettingUIComponent::DrawGraphicsDropdown(Vector2 position) {
+    Rectangle dropdownRect = {position.x, position.y, sliderWidth, sliderHeight};
+    
+    // Draw dropdown background
+    DrawRectangleRec(dropdownRect, DARKGRAY);
+    DrawRectangleLinesEx(dropdownRect, 2, WHITE);
+    
+    // Draw current selection
+    const char* qualityNames[] = {"Low", "Medium", "High"};
+    const char* selectedText = qualityNames[gameState->settings.graphicsQuality];
+    DrawText(selectedText, position.x + 10, position.y + 2, settingFontSize - 4, valueColor);
     
     // Draw dropdown arrow
     DrawText("v", position.x + sliderWidth - 25, position.y + 2, settingFontSize - 4, WHITE);
@@ -184,40 +179,36 @@ void GameSettingUIComponent::HandleInput() {
     if (IsKeyPressed(KEY_UP)) {
         selectedSettingIndex--;
         if (selectedSettingIndex < 0) {
-            selectedSettingIndex = settings.size() - 1;
+            selectedSettingIndex = SETTING_COUNT - 1;
         }
     }
     
     if (IsKeyPressed(KEY_DOWN)) {
         selectedSettingIndex++;
-        if (selectedSettingIndex >= settings.size()) {
+        if (selectedSettingIndex >= SETTING_COUNT) {
             selectedSettingIndex = 0;
         }
     }
     
     // Modify selected setting with LEFT/RIGHT
     if (IsKeyPressed(KEY_LEFT)) {
-        UpdateSettingValue(selectedSettingIndex, -0.1f);
+        UpdateSelectedSetting(-0.1f);
     }
     
     if (IsKeyPressed(KEY_RIGHT)) {
-        UpdateSettingValue(selectedSettingIndex, 0.1f);
+        UpdateSelectedSetting(0.1f);
     }
     
-    // Mouse interaction for sliders
+    // Mouse interaction for volume slider
     if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-        Vector2 mousePos = GetMousePosition();
+        Vector2 controlPos = {
+            settingsStartPosition.x,
+            settingsStartPosition.y + VOLUME * settingSpacing + 30
+        };
         
-        for (int i = 0; i < settings.size(); i++) {
-            Vector2 controlPos = {
-                settingsStartPosition.x,
-                settingsStartPosition.y + i * settingSpacing + 30
-            };
-            
-            if (settings[i].type == SettingType::VOLUME && IsMouseOverSlider(controlPos)) {
-                float newValue = GetSliderValueFromMouse(controlPos, settings[i].minValue, settings[i].maxValue);
-                settings[i].value = Clamp(newValue, settings[i].minValue, settings[i].maxValue);
-            }
+        if (IsMouseOverSlider(controlPos)) {
+            float newValue = GetSliderValueFromMouse(controlPos, 0.0f, 1.0f);
+            gameState->settings.masterVolume = Clamp(newValue, 0.0f, 1.0f);
         }
     }
     
@@ -236,39 +227,60 @@ void GameSettingUIComponent::HandleInput() {
     }
 }
 
-void GameSettingUIComponent::UpdateSettingValue(int settingIndex, float delta) {
-    if (settingIndex < 0 || settingIndex >= settings.size()) return;
-    
-    SettingItem& setting = settings[settingIndex];
-    
-    if (setting.type == SettingType::VOLUME) {
-        setting.value = Clamp(setting.value + delta, setting.minValue, setting.maxValue);
-    } else {
-        // For dropdown settings, change selection
-        if (delta > 0) {
-            setting.selectedOption++;
-            if (setting.selectedOption >= setting.options.size()) {
-                setting.selectedOption = 0;
+void GameSettingUIComponent::UpdateSelectedSetting(float delta) {
+    switch (selectedSettingIndex) {
+        case VOLUME:
+            gameState->settings.masterVolume = Clamp(gameState->settings.masterVolume + delta, 0.0f, 1.0f);
+            break;
+            
+        case DIFFICULTY:
+            if (delta > 0) {
+                gameState->settings.difficulty = (GameSettings::Difficulty)((gameState->settings.difficulty + 1) % 3);
+            } else {
+                gameState->settings.difficulty = (GameSettings::Difficulty)((gameState->settings.difficulty + 2) % 3);
             }
-        } else {
-            setting.selectedOption--;
-            if (setting.selectedOption < 0) {
-                setting.selectedOption = setting.options.size() - 1;
+            break;
+            
+        case CONTROLS:
+            if (delta > 0) {
+                gameState->settings.controlScheme = (GameSettings::ControlScheme)((gameState->settings.controlScheme + 1) % 2);
+            } else {
+                gameState->settings.controlScheme = (GameSettings::ControlScheme)((gameState->settings.controlScheme + 1) % 2);
             }
-        }
+            break;
+            
+        case GRAPHICS:
+            if (delta > 0) {
+                gameState->settings.graphicsQuality = (GameSettings::GraphicsQuality)((gameState->settings.graphicsQuality + 1) % 3);
+            } else {
+                gameState->settings.graphicsQuality = (GameSettings::GraphicsQuality)((gameState->settings.graphicsQuality + 2) % 3);
+            }
+            break;
     }
 }
 
 void GameSettingUIComponent::ApplySettings() {
-    // Apply settings to game state or save to file
-    std::cout << "Applying settings:" << std::endl;
-    for (const auto& setting : settings) {
-        if (setting.type == SettingType::VOLUME) {
-            std::cout << "  " << setting.label << ": " << (setting.value * 100) << "%" << std::endl;
-        } else {
-            std::cout << "  " << setting.label << ": " << setting.options[setting.selectedOption] << std::endl;
-        }
+    // Settings are already applied directly to gameState->settings during interaction
+    // Just need to trigger any additional logic and notify other systems
+    
+    // Update player health if difficulty changed
+    gameState->playerHealth = gameState->settings.GetPlayerStartingHealth();
+    if (gameState->playerCurrentHealth > gameState->playerHealth) {
+        gameState->playerCurrentHealth = gameState->playerHealth;
     }
+    
+    // Log applied settings
+    const GameSettings& settings = gameState->settings;
+    std::cout << "Settings applied:" << std::endl;
+    std::cout << "  Master Volume: " << (settings.masterVolume * 100) << "%" << std::endl;
+    std::cout << "  Difficulty: " << (settings.difficulty == GameSettings::EASY ? "Easy" : 
+                                     settings.difficulty == GameSettings::NORMAL ? "Normal" : "Hard") << std::endl;
+    std::cout << "  Controls: " << (settings.controlScheme == GameSettings::WASD ? "WASD" : "Arrow Keys") << std::endl;
+    std::cout << "  Graphics: " << (settings.graphicsQuality == GameSettings::LOW ? "Low" : 
+                                   settings.graphicsQuality == GameSettings::MEDIUM ? "Medium" : "High") << std::endl;
+    
+    // Emit event to notify other systems that settings changed
+    eventSystem->Emit("OnSettingsChanged");
 }
 
 // Helper methods

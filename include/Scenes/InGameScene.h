@@ -25,4 +25,5 @@ private:
     void InitializeGame();
     void UpdateGameLogic();
     void HandleGameOver();
+    void ApplyGameSettings();
 };

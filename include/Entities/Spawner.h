@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "EventSystem.h"
 #include "Enemy.h"
+#include "GameState.h"
 
 class Spawner {
 public:
@@ -13,8 +14,10 @@ public:
     int maxEnemies;
     std::vector<Enemy> enemies;
     EventSystem* eventSystem;
+    GameState* gameState;
+    float spawnRateMultiplier;
 
-    Spawner(float x, float y, EventSystem* es);
+    Spawner(float x, float y, EventSystem* es, GameState* gs);
     void Update();
     void Draw();
     void Move(float x, float y);
