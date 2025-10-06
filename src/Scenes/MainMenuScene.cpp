@@ -14,9 +14,6 @@ void MainMenuScene::Update() {
     if (uiSystem) {
         uiSystem->Update();
     }
-    
-    // Keep old input handling as fallback during transition
-    // HandleInput();
 }
 
 void MainMenuScene::Draw() {

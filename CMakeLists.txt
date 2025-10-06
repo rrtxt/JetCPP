@@ -9,14 +9,17 @@ file(GLOB_RECURSE SRC_MAIN src/*.cpp)
 # Create the executable
 add_executable(raylib_jet_cpp
     ${SRC_MAIN}
-    # ${SRC_CORE}
-    # ${SRC_ENTITIES}
-    # ${SRC_SYSTEMS}
-    # ${SRC_UI}
 )
 
-# Tell CMake where to find *your* headers
-target_include_directories(raylib_jet_cpp PRIVATE include)
+# CMake headers
+target_include_directories(raylib_jet_cpp PRIVATE 
+    include
+    include/Core
+    include/Entities
+    include/Scenes
+    include/System
+    include/UI
+)
 
 # Tell CMake where to find raylib headers/libs
 target_include_directories(raylib_jet_cpp PRIVATE external)

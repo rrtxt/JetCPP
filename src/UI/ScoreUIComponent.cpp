@@ -6,8 +6,6 @@ ScoreUIComponent::ScoreUIComponent(GameState* gameState)
     // Set up visual properties
     fontSize = 30;
     textColor = BLACK;
-    
-    // Position will be calculated dynamically to center the score
 }
 
 void ScoreUIComponent::Draw() {

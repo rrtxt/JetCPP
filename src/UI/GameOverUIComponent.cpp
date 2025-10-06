@@ -16,9 +16,6 @@ GameOverUIComponent::GameOverUIComponent(GameState* gameState, EventSystem* even
 void GameOverUIComponent::Draw() {
     if (!isVisible || !isEnabled || !gameState->isGameOver) return;
     
-    // Draw semi-transparent overlay
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
-    
     // Calculate positions
     const char* titleText = "GAME OVER!";
     int titleWidth = MeasureText(titleText, titleFontSize);
