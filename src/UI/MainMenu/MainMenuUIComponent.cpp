@@ -11,8 +11,6 @@ MainMenuUIComponent::MainMenuUIComponent(GameState* gameState, EventSystem* even
     selectedColor = RED;
     normalColor = WHITE;
     instructionColor = LIGHTGRAY;
-    
-    CalculatePositions();
 }
 
 void MainMenuUIComponent::Draw() {
@@ -97,8 +95,4 @@ void MainMenuUIComponent::HandleMenuSelection() {
         default:
             break;
     }
-}
-
-void MainMenuUIComponent::CalculatePositions() {
-    // Positions are calculated dynamically in Draw() for responsive layout
 }

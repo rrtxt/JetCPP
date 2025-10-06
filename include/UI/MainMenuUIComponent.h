@@ -30,5 +30,4 @@ private:
     
     void HandleInput();
     void HandleMenuSelection();
-    void CalculatePositions();
 };

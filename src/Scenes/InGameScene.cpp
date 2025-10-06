@@ -86,10 +86,9 @@ void InGameScene::UpdateGameLogic() {
 }
 
 void InGameScene::HandleGameOver() {
-    // Handle input during game over
+    // Restart game
     if (IsKeyPressed(KEY_R)) {
-        // Restart game
-        OnEnter(); // Reset the game
+        OnEnter();
     }
     
     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
