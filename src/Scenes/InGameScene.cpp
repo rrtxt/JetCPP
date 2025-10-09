@@ -37,8 +37,8 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
     std::cout << "Entered In-Game Scene" << std::endl;
     
     // Sound initialization 
-    soundSystem = soundSystem;
-    soundSystem->LoadSFX("shoot", "assets/sound/BulletShoot.wav");
+    this->soundSystem = soundSystem;
+    this->soundSystem->LoadSFX("shoot", "assets/sound/BulletShoot.wav");
     
     // Reset time scale
     TimeScale::Set(1);
@@ -98,6 +98,7 @@ void InGameScene::UpdateGameLogic() {
 void InGameScene::HandleGameOver() {
     // Restart game
     if (IsKeyPressed(KEY_R)) {
+        // eventSystem->Emit("ChangeToInGame");
         OnEnter(soundSystem);
     }
     

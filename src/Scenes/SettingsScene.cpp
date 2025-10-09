@@ -19,7 +19,7 @@ void SettingsScene::Draw() {
 
 void SettingsScene::OnEnter(SoundSystem* soundSystem) {
     std::cout << "Entered Settings Scene" << std::endl;
-    soundSystem = soundSystem;
+    this->soundSystem = soundSystem;
 
 }
 

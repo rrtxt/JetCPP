@@ -25,7 +25,7 @@ void MainMenuScene::Draw() {
 
 void MainMenuScene::OnEnter(SoundSystem* soundSystem) {
     std::cout << "Entered Main Menu Scene" << std::endl;
-    soundSystem = soundSystem;
+    this->soundSystem = soundSystem;
 
     // Reset game state when entering main menu
     gameState->isGameOver = false;
