@@ -5,8 +5,8 @@
 #include "SettingsScene.h"
 #include "TimeScale.h"
 
-SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem)
-    : gameState(gameState), eventSystem(eventSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
+SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem)
+    : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
     
     // Register scene change events
     eventSystem->Subscribe("ChangeToMainMenu", [this]() {
@@ -64,7 +64,7 @@ void SceneManager::ChangeScene(GameState::Scene newScene) {
     
     // Enter new scene
     if (currentSceneObject) {
-        currentSceneObject->OnEnter();
+        currentSceneObject->OnEnter(soundSystem);
     }
     
     std::cout << "Scene changed to: " << (newScene == GameState::MAIN_MENU ? "MAIN_MENU" : "IN_GAME") << std::endl;

@@ -46,6 +46,7 @@ void Player::Update() {
     // Shooting
     if (IsKeyDown(KEY_SPACE) && shootCooldown <= 0) {
         Bullet newBullet(position.x + size.x / 2 - 2.5f, position.y, eventSystem);
+        eventSystem->Emit("OnBulletSpawn");
         newBullet.active = true;
         bullets.push_back(newBullet);
         shootCooldown = fireRate;

@@ -1,4 +1,5 @@
 #include "InGameScene.h"
+#include "SoundSystem.h"
 #include "TimeScale.h"
 
 InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem)
@@ -32,8 +33,12 @@ void InGameScene::Draw() {
     if (uiSystem) uiSystem->Draw();
 }
 
-void InGameScene::OnEnter() {
+void InGameScene::OnEnter(SoundSystem* soundSystem) {
     std::cout << "Entered In-Game Scene" << std::endl;
+    
+    // Sound initialization 
+    soundSystem = soundSystem;
+    soundSystem->LoadSFX("shoot", "assets/sound/BulletShoot.wav");
     
     // Reset time scale
     TimeScale::Set(1);
@@ -58,6 +63,8 @@ void InGameScene::OnEnter() {
 
 void InGameScene::OnExit() {
     std::cout << "Exited In-Game Scene" << std::endl;
+    soundSystem->StopMusic();
+    soundSystem->UnloadSFX("shoot");
     // Keep entities alive for potential return to game
 }
 
@@ -91,7 +98,7 @@ void InGameScene::UpdateGameLogic() {
 void InGameScene::HandleGameOver() {
     // Restart game
     if (IsKeyPressed(KEY_R)) {
-        OnEnter();
+        OnEnter(soundSystem);
     }
     
     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {

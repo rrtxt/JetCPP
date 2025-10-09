@@ -13,7 +13,7 @@ public:
 
     void Update() override;
     void Draw() override;
-    void OnEnter() override;
+    void OnEnter(SoundSystem* soundsystem) override;
     void OnExit() override;
 
 private:

@@ -11,7 +11,7 @@ public:
 
     void Update() override;
     void Draw() override;
-    void OnEnter() override;
+    void OnEnter(SoundSystem* soundSystem) override;
     void OnExit() override;
 
 private:

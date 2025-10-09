@@ -17,8 +17,10 @@ void SettingsScene::Draw() {
     }
 }
 
-void SettingsScene::OnEnter() {
+void SettingsScene::OnEnter(SoundSystem* soundSystem) {
     std::cout << "Entered Settings Scene" << std::endl;
+    soundSystem = soundSystem;
+
 }
 
 void SettingsScene::OnExit() {

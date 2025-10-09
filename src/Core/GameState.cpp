@@ -71,7 +71,7 @@ void GameState::ResetGameForNewSettings() {
     playerCurrentHealth = playerHealth;
 }
 
-void GameState::RegisterEvents(EventSystem* es) {
+void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
     es->Subscribe("OnPlayerDied", [&]() {
         this->isGameOver = true;
     });
@@ -88,5 +88,9 @@ void GameState::RegisterEvents(EventSystem* es) {
     });
     es->Subscribe("OnEnemyDestroyed", [&]() {
         this->score += 100;
+    });
+    es->Subscribe("OnBulletSpawn", [&, ss]() {
+        std::cout << "Bullet Spawned, playing sound" << std::endl;
+        ss->PlaySFX("shot");
     });
 }
