@@ -13,6 +13,8 @@ public:
     void LoadMusic(const std::string& name, const std::string& filepath);
     void PlaySFX(const std::string& name);
     void PlayMusic(const std::string& name, bool loop = true);
+    void UnloadSFX(const std::string& name);
+    void UnloadMusic(const std::string& name);
     void Update();
     void StopMusic();
     void SetVolume(float volume); // Set master volume
