@@ -91,6 +91,6 @@ void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
     });
     es->Subscribe("OnBulletSpawn", [&, ss]() {
         std::cout << "Bullet Spawned, playing sound" << std::endl;
-        ss->PlaySFX("shot");
+        ss->PlaySFX("shoot");
     });
 }
