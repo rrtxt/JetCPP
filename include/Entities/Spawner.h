@@ -8,8 +8,6 @@
 class Spawner {
 public:
     Vector2 position;
-    float spawnCooldown;
-    float spawnRate;
     int spawnCount = 0;
     int maxEnemies;
     std::vector<Enemy> enemies;
@@ -20,6 +18,7 @@ public:
 
     Spawner(float x, float y, EventSystem* es, GameState* gs);
     void Update();
+    void Spawn();
     void Draw();
     void Move(float x, float y);
 };
