@@ -8,6 +8,7 @@ void Gamewave::Start() {
     spawnedEnemies = 0;
     spawnTimer = 0.0f;
     isCompleted = false;
+    spawner->Move(GetRandomValue(50, GetScreenWidth() - 50), -30);
 }
 
 void Gamewave::Update() {
