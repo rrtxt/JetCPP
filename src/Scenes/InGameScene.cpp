@@ -9,6 +9,7 @@ InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem)
 
 void InGameScene::Update() {
     if (!gameState->isGameOver) {
+        waveSystem->Update();
         UpdateGameLogic();
     } else {
         HandleGameOver();
@@ -26,10 +27,11 @@ void InGameScene::Draw() {
     if (!gameState->isGameOver) {
         // Draw game entities
         if (player) player->Draw();
-        if (spawner) spawner->Draw();
+        if (waveSystem) waveSystem->Draw();
+        if (waveSystem) waveSystem->Draw();
     }
     
-    // Always draw UI (includes game over screen)
+    // Always draw UI
     if (uiSystem) uiSystem->Draw();
 }
 
@@ -49,15 +51,16 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
     gameState->playerCurrentHealth = gameState->playerHealth;
     
     // Reinitialize game if needed
-    if (!player || !spawner) {
+    if (!player || !waveSystem) {
         InitializeGame();
     } else {
         // Reset existing entities
         player->currentHealth = player->maxHealth;
         player->position = {GetScreenWidth() / 2.0f - player->size.x / 2.0f, GetScreenHeight() / 2.0f};
         player->bullets.clear();
-        spawner->enemies.clear();
-        spawner->spawnCount = 0;
+        waveSystem->Start();
+        // spawner->enemies.clear();
+        // spawner->spawnCount = 0;
     }
 }
 
@@ -72,7 +75,13 @@ void InGameScene::InitializeGame() {
     // Create game entities with settings applied
     player = std::make_unique<Player>(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
     spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, eventSystem, gameState);
+    waveSystem = std::make_unique<GamewaveSystem>();
     uiSystem = std::make_unique<UISystem>(gameState, eventSystem);
+
+    // Define waves
+    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 5, 1.0f));
+    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 10, 0.8f));
+    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 15, 0.6f));
     
     // Apply game settings to entities
     ApplyGameSettings();
@@ -80,6 +89,8 @@ void InGameScene::InitializeGame() {
     // Setup in-game UI components
     uiSystem->SetupInGameUI();
     
+    waveSystem->Start();
+
     std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
 }
 

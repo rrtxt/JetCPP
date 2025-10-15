@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Spawner.h"
+#include "GamewaveSystem.h"
 #include "CollisionSystem.h"
 #include "UISystem.h"
 
@@ -20,6 +21,7 @@ private:
     // Game entities
     std::unique_ptr<Player> player;
     std::unique_ptr<Spawner> spawner;
+    std::unique_ptr<GamewaveSystem> waveSystem;
     std::unique_ptr<UISystem> uiSystem;
     
     void InitializeGame();
