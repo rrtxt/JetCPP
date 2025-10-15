@@ -58,9 +58,9 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
         player->currentHealth = player->maxHealth;
         player->position = {GetScreenWidth() / 2.0f - player->size.x / 2.0f, GetScreenHeight() / 2.0f};
         player->bullets.clear();
+        spawner->enemies.clear();
+        spawner->spawnCount = 0;
         waveSystem->Start();
-        // spawner->enemies.clear();
-        // spawner->spawnCount = 0;
     }
 }
 
