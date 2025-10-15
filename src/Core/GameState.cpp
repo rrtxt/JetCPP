@@ -40,8 +40,8 @@ float GameSettings::GetEnemyMaxSpawnCount() const {
 float GameSettings::GetEnemySpawnSpread() const {
     switch (difficulty) {
         case EASY: return 15;
-        case NORMAL: return 25;
-        case HARD: return 40;
+        case NORMAL: return 40;
+        case HARD: return 75;
         default: return 15;
     }
 }
