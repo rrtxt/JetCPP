@@ -28,6 +28,13 @@ void Gamewave::Update() {
     }
 }
 
+void Gamewave::Reset() {
+    spawnedEnemies = 0;
+    spawnTimer = 0.0f;
+    isCompleted = false;
+    spawner->Reset();
+}
+
 void Gamewave::Draw() {
     spawner->Draw();
 }
