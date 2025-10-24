@@ -29,7 +29,7 @@ void Bullet::Update() {
     }
 }
 
-void Bullet::OnCollision(Enemy& enemy) {
+void Bullet::OnCollision(IEnemy& enemy) {
     if (active && enemy.active) {
         active = false; 
 
