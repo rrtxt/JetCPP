@@ -1,6 +1,7 @@
 #include "InGameScene.h"
 #include "SoundSystem.h"
 #include "TimeScale.h"
+#include "Enemy/EnemyTypes.h"
 
 InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem)
     : Scene(gameState, eventSystem) {
@@ -9,7 +10,7 @@ InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem)
 
 void InGameScene::Update() {
     if (!gameState->isGameOver) {
-        waveSystem->Update();
+        // waveSystem->Update();
         UpdateGameLogic();
     } else {
         HandleGameOver();
@@ -28,7 +29,7 @@ void InGameScene::Draw() {
         // Draw game entities
         if (player) player->Draw();
         if (waveSystem) waveSystem->Draw();
-        if (waveSystem) waveSystem->Draw();
+        // if (waveSystem) waveSystem->Draw();
     }
     
     // Always draw UI
@@ -74,7 +75,7 @@ void InGameScene::OnExit() {
 void InGameScene::InitializeGame() {
     // Create game entities with settings applied
     player = std::make_unique<Player>(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
-    spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, eventSystem, gameState);
+    spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
     waveSystem = std::make_unique<GamewaveSystem>();
     uiSystem = std::make_unique<UISystem>(gameState, eventSystem);
 
@@ -97,7 +98,8 @@ void InGameScene::InitializeGame() {
 void InGameScene::UpdateGameLogic() {
     // Update game entities
     if (player) player->Update();
-    if (spawner) spawner->Update();
+    // if (spawner) spawner->Update();
+    if (waveSystem) waveSystem->Update();
     
     // Check collisions
     if (player && spawner) {
