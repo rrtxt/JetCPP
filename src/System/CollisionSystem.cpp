@@ -1,21 +1,21 @@
 #include "CollisionSystem.h"
 
-void CollisionSystem::CheckCollisionPlayerEnemy(Player& player, vector<Enemy>& enemies) {
+void CollisionSystem::CheckCollisionPlayerEnemy(Player& player, vector<std::unique_ptr<IEnemy>>& enemies) {
     for(auto& enemy : enemies) {
-        if(CheckCollisionRecs(player.collision, enemy.collision)) {
+        if(enemy && CheckCollisionRecs(player.collision, enemy->collision)) {
             player.OnCollision();
-            enemy.OnCollision();
+            enemy->OnCollision();
             std::cout << "Collision Detected!" << std::endl;
         }
     }
 }
 
-void CollisionSystem::CheckCollisionBulletEnemy(vector<Bullet>& bullets, vector<Enemy>& enemies) {
+void CollisionSystem::CheckCollisionBulletEnemy(vector<Bullet>& bullets, vector<std::unique_ptr<IEnemy>>& enemies) {
     for(auto& bullet : bullets) {
         for(auto& enemy : enemies) {
-            if(CheckCollisionRecs(bullet.collision, enemy.collision)) {
-                bullet.OnCollision(enemy);
-                enemy.OnCollision();
+            if(enemy && CheckCollisionRecs(bullet.collision, enemy->collision)) {
+                bullet.OnCollision(*enemy);
+                enemy->OnCollision();
                 std::cout << "Bullet hit Enemy!" << std::endl;
             }
         }
