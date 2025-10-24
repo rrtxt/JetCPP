@@ -1,23 +1,11 @@
-#include "Enemy.h"
+#include "Enemy/NormalEnemy.h"
 #include "TimeScale.h"
 
-Enemy::Enemy(float x, float y, GameState* gs) {
-    position.x = x;
-    position.y = y;
-    collision.x = x;
-    collision.y = y;
-    collision.width = 30;
-    collision.height = 30;
-    size.x = 30;
-    size.y = 30;
-    speed = 200;
-    active = true;
-
-    gameState = gs;
+NormalEnemy::NormalEnemy(float x, float y, GameState* gs) : IEnemy(x, y, gs) {
     speedMultiplier = gameState->settings.GetEnemySpeedMultiplier();
 }
 
-void Enemy::Update() {
+void NormalEnemy::Update() {
     if(active) {
         // Multiply speed by enemy speed multiplier from game settings
         position.y += speed * speedMultiplier * GetFrameTime() * TimeScale::Get();
@@ -32,13 +20,13 @@ void Enemy::Update() {
     }
 }
 
-void Enemy::OnCollision() {
+void NormalEnemy::OnCollision() {
     if (active) {
         active = false;
     }
 }
 
-void Enemy::Draw() {
+void NormalEnemy::Draw() {
     if(active) {
         DrawRectangle(position.x, position.y, size.x, size.y, BLUE);
     }
