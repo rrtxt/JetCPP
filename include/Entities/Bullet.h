@@ -2,7 +2,7 @@
 
 #include "Common.h"
 #include "EventSystem.h"
-#include "Enemy.h"
+#include "Enemy/IEnemy.h"
 
 class Bullet {
 public:
@@ -16,6 +16,6 @@ public:
 
     Bullet(float x, float y, EventSystem* es);
     void Update();
-    void OnCollision(Enemy& enemy);
+    void OnCollision(IEnemy& enemy);
     void Draw();
 };
