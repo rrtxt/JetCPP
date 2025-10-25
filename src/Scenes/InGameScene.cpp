@@ -12,6 +12,11 @@ void InGameScene::Update() {
     if (!gameState->isGameOver) {
         // waveSystem->Update();
         UpdateGameLogic();
+        
+        // Check if all waves are completed (victory condition)
+        if (waveSystem && waveSystem->IsWaveFinished()) {
+            std::cout << "All waves completed! Victory!" << std::endl;
+        }
     } else {
         HandleGameOver();
     }
@@ -29,7 +34,6 @@ void InGameScene::Draw() {
         // Draw game entities
         if (player) player->Draw();
         if (waveSystem) waveSystem->Draw();
-        // if (waveSystem) waveSystem->Draw();
     }
     
     // Always draw UI
@@ -59,8 +63,13 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
         player->currentHealth = player->maxHealth;
         player->position = {GetScreenWidth() / 2.0f - player->size.x / 2.0f, GetScreenHeight() / 2.0f};
         player->bullets.clear();
-        spawner->enemies.clear();
-        spawner->spawnCount = 0;
+        
+        // Reset all spawners before restarting waves
+        if (normalSpawner) normalSpawner->Reset();
+        if (zigzagSpawner) zigzagSpawner->Reset();
+        
+        // Reset and start the wave system
+        waveSystem->Reset();
         waveSystem->Start();
     }
 }
@@ -75,14 +84,16 @@ void InGameScene::OnExit() {
 void InGameScene::InitializeGame() {
     // Create game entities with settings applied
     player = std::make_unique<Player>(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
-    spawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
+    normalSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
+    zigzagSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::ZIGZAG, eventSystem, gameState);
+    
     waveSystem = std::make_unique<GamewaveSystem>();
     uiSystem = std::make_unique<UISystem>(gameState, eventSystem);
 
     // Define waves
-    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 5, 1.0f));
-    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 10, 0.8f));
-    waveSystem->AddWave(make_shared<Gamewave>(spawner.get(), 15, 0.6f));
+    waveSystem->AddWave(make_shared<Gamewave>(normalSpawner.get(), 5, 1.0f));
+    waveSystem->AddWave(make_shared<Gamewave>(zigzagSpawner.get(), 10, 0.8f));
+    waveSystem->AddWave(make_shared<Gamewave>(normalSpawner.get(), 15, 0.6f));
     
     // Apply game settings to entities
     ApplyGameSettings();
@@ -98,13 +109,16 @@ void InGameScene::InitializeGame() {
 void InGameScene::UpdateGameLogic() {
     // Update game entities
     if (player) player->Update();
-    // if (spawner) spawner->Update();
     if (waveSystem) waveSystem->Update();
     
     // Check collisions
-    if (player && spawner) {
-        CollisionSystem::CheckCollisionPlayerEnemy(*player, spawner->enemies);
-        CollisionSystem::CheckCollisionBulletEnemy(player->bullets, spawner->enemies);
+    auto currentWave = waveSystem->GetCurrentWave();
+    if (player && currentWave) {
+        Spawner* currentSpawner = currentWave->GetSpawner();
+        if (currentSpawner) {
+            CollisionSystem::CheckCollisionPlayerEnemy(*player, currentSpawner->enemies);
+            CollisionSystem::CheckCollisionBulletEnemy(player->bullets, currentSpawner->enemies);
+        }
     }
 }
 
@@ -122,7 +136,7 @@ void InGameScene::HandleGameOver() {
 }
 
 void InGameScene::ApplyGameSettings() {
-    if (!player || !spawner) return;
+    if (!player) return;
     
     const GameSettings& settings = gameState->settings;
     

@@ -20,7 +20,8 @@ public:
 private:
     // Game entities
     std::unique_ptr<Player> player;
-    std::unique_ptr<Spawner> spawner;
+    std::unique_ptr<Spawner> normalSpawner;
+    std::unique_ptr<Spawner> zigzagSpawner;
     std::unique_ptr<GamewaveSystem> waveSystem;
     std::unique_ptr<UISystem> uiSystem;
     
