@@ -14,6 +14,8 @@ class GamewaveSystem{
         void AddWave(shared_ptr<Gamewave> wave);
         void Start();
         void Update();
+        void Reset();
+        shared_ptr<Gamewave> GetCurrentWave();
         void Draw();
         bool IsWaveFinished();
 };
