@@ -30,6 +30,6 @@ void ZigZagEnemy::OnCollision() {
 
 void ZigZagEnemy::Draw() {
     if (active) {
-        DrawRectangle(position.x, position.y, size.x, size.y, RED);
+        DrawRectangle(position.x, position.y, size.x, size.y, PURPLE);
     }
 }
