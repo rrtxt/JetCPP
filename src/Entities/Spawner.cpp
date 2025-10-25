@@ -8,7 +8,7 @@ Spawner::Spawner(float x, float y, EnemyType enemyType, EventSystem* es, GameSta
     position.x = x;
     position.y = y;
     eventSystem = es;   
-    enemyType = enemyType;
+    this->enemyType = enemyType;
     gameState = gs;
     maxEnemies =  gameState->settings.GetEnemyMaxSpawnCount();
     spawnRateMultiplier = gameState->settings.GetSpawnRateMultiplier();
@@ -25,7 +25,8 @@ void Spawner::Draw() {
 
 void Spawner::Spawn() {
     std::unique_ptr<IEnemy> newEnemy;
-    switch (this->enemyType) {
+    std::cout << "Spawning enemy of type: " << static_cast<int>(enemyType) << std::endl;
+    switch (enemyType) {
         case EnemyType::NORMAL:
             newEnemy = std::make_unique<NormalEnemy>(position.x + GetRandomValue(-1 * spawnSpread, spawnSpread), position.y, gameState);
             break;
