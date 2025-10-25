@@ -35,6 +35,10 @@ void Gamewave::Reset() {
     spawner->Reset();
 }
 
+Spawner* Gamewave::GetSpawner(){
+    return this->spawner;
+}
+
 void Gamewave::Draw() {
     spawner->Draw();
 }

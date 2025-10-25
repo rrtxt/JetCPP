@@ -10,6 +10,7 @@ class Gamewave {
         void Update();
         void Draw();
         void Reset();
+        Spawner* GetSpawner();
         bool getIsCompleted() const { return isCompleted; }
     private:
         Spawner* spawner;
