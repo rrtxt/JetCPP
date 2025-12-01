@@ -1,0 +1,24 @@
+{
+  "levelName": "Level 1",
+  "totalWave": 5,
+  "waves": [
+    {
+      "enemyType": "normal",
+      "maxEnemies": 5,
+      "spawnInterval": 0.5,
+      "spread": 120
+    },
+    {
+      "enemyType": "zigzag",
+      "maxEnemies": 7,
+      "spawnInterval": 0.7,
+      "spread": 100
+    },
+    {
+      "enemyType": "normal",
+      "maxEnemies": 10,
+      "spawnInterval": 0.4,
+      "spread": 200
+    }
+  ]
+}

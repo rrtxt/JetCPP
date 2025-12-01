@@ -1,0 +1,146 @@
+[
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Core\\GameState.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Core\\GameState.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Core/GameState.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Core/GameState.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Core\\SceneManager.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Core\\SceneManager.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Core/SceneManager.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Core/SceneManager.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Core\\TimeScale.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Core\\TimeScale.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Core/TimeScale.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Core/TimeScale.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Bullet.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Bullet.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Bullet.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Bullet.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Enemy\\IEnemy.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Enemy\\IEnemy.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Enemy/IEnemy.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Enemy/IEnemy.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Enemy\\NormalEnemy.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Enemy\\NormalEnemy.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Enemy/NormalEnemy.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Enemy/NormalEnemy.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Enemy\\ZigZagEnemy.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Enemy\\ZigZagEnemy.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Enemy/ZigZagEnemy.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Enemy/ZigZagEnemy.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Player.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Player.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Player.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Player.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Entities\\Spawner.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Entities\\Spawner.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Entities/Spawner.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Entities/Spawner.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Scenes\\InGameScene.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Scenes\\InGameScene.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Scenes/InGameScene.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Scenes/InGameScene.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Scenes\\MainMenuScene.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Scenes\\MainMenuScene.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Scenes/MainMenuScene.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Scenes/MainMenuScene.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\Scenes\\SettingsScene.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\Scenes\\SettingsScene.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/Scenes/SettingsScene.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/Scenes/SettingsScene.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\CollisionSystem.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\CollisionSystem.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/CollisionSystem.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/CollisionSystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\EventSystem.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\EventSystem.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/EventSystem.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/EventSystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\Gamewave.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\Gamewave.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/Gamewave.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/Gamewave.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\GamewaveSystem.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\GamewaveSystem.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/GamewaveSystem.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/GamewaveSystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\SoundSystem.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\SoundSystem.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/SoundSystem.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/SoundSystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\System\\UISystem.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\System\\UISystem.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/System/UISystem.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/System/UISystem.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\UI\\InGame\\GameOverUIComponent.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\UI\\InGame\\GameOverUIComponent.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/UI/InGame/GameOverUIComponent.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/UI/InGame/GameOverUIComponent.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\UI\\InGame\\HealthBarUIComponent.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\UI\\InGame\\HealthBarUIComponent.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/UI/InGame/HealthBarUIComponent.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/UI/InGame/HealthBarUIComponent.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\UI\\InGame\\ScoreUIComponent.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\UI\\InGame\\ScoreUIComponent.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/UI/InGame/ScoreUIComponent.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/UI/InGame/ScoreUIComponent.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\UI\\MainMenu\\MainMenuUIComponent.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\UI\\MainMenu\\MainMenuUIComponent.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/UI/MainMenu/MainMenuUIComponent.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/UI/MainMenu/MainMenuUIComponent.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\UI\\Settings\\GameSettingUIComponent.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\UI\\Settings\\GameSettingUIComponent.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/UI/Settings/GameSettingUIComponent.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/UI/Settings/GameSettingUIComponent.cpp.obj"
+},
+{
+  "directory": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/build",
+  "command": "C:\\msys64\\mingw64\\bin\\c++.exe  @CMakeFiles/raylib_jet_cpp.dir/includes_CXX.rsp -std=gnu++17 -o CMakeFiles\\raylib_jet_cpp.dir\\src\\main.cpp.obj -c C:\\Users\\rizfi\\main\\Learn\\Gamedev\\JetCPP\\src\\main.cpp",
+  "file": "C:/Users/rizfi/main/Learn/Gamedev/JetCPP/src/main.cpp",
+  "output": "CMakeFiles/raylib_jet_cpp.dir/src/main.cpp.obj"
+}
+]

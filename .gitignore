@@ -29,3 +29,5 @@
 raylib.*
 raymath.*
 rlgl.*
+
+.cache
