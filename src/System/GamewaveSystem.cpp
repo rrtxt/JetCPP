@@ -1,6 +1,13 @@
 #include "GamewaveSystem.h"
+#include "Enemy/EnemyTypes.h"
+#include "GameState.h"
+#include "Gamewave.h"
+#include "Spawner.h"
+#include <complex>
+#include <memory>
 
-GamewaveSystem::GamewaveSystem() : currentWaveIndex(0) {}
+GamewaveSystem::GamewaveSystem(GameState* state, Spawner* normal, Spawner* zigzag)
+: gameState(state), currentWaveIndex(0), normalSpawner(normal), zigzagSpawner(zigzag) {}
 
 void GamewaveSystem::AddWave(shared_ptr<Gamewave> wave) {
     waves.push_back(wave);
@@ -50,6 +57,31 @@ shared_ptr<Gamewave> GamewaveSystem::GetCurrentWave() {
         return waves[currentWaveIndex];
     }
     return nullptr;
+}
+
+shared_ptr<Gamewave> GamewaveSystem::GenerateNextWave(){
+    waveNumber++;
+
+    int enemyCount = this->gameState->settings.GetEnemyMaxSpawnCount() + waveNumber * 2;
+    float spawnDelay = std::max(0.2f, baseSpawnDelay - waveNumber * 0.05f);
+
+    EnemyType type;
+    if (waveNumber % 3 == 0){
+        type = EnemyType::ZIGZAG;
+    } else {
+        type = EnemyType::NORMAL;
+    }
+
+    Spawner* spawner = (type == EnemyType::ZIGZAG) ? zigzagSpawner : normalSpawner;
+
+    return make_shared<Gamewave>(spawner, enemyCount, spawnDelay);
+}
+
+void GamewaveSystem::StartNextWave(){
+    auto nextWave = GenerateNextWave();
+    this->AddWave(nextWave);
+    currentWaveIndex++;
+    waves[currentWaveIndex]->Start();
 }
 
 // Draws the current wave
