@@ -7,20 +7,24 @@
 
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem)
     : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
-    
+
     // Register scene change events
     eventSystem->Subscribe("ChangeToMainMenu", [this]() {
         ChangeScene(GameState::MAIN_MENU);
     });
-    
+
     eventSystem->Subscribe("ChangeToInGame", [this]() {
         ChangeScene(GameState::IN_GAME);
     });
-    
+
     eventSystem->Subscribe("ChangeToSettings", [this]() {
         ChangeScene(GameState::SETTINGS);
     });
-    
+
+    eventSystem->Subscribe("QuitGame", [&]() {
+        this->gameState->isShouldQuit = true;
+    });
+
     eventSystem->Subscribe("RestartGame", [this]() {
         // Reset game state and restart
         this->gameState->isGameOver = false;
@@ -29,12 +33,12 @@ SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, Sound
         TimeScale::Set(1);
         ChangeScene(GameState::IN_GAME);
     });
-    
+
     eventSystem->Subscribe("OnPlayerDied", [this]() {
         // Reset time scale when player dies
         TimeScale::Set(0);
     });
-    
+
     // Initialize with main menu
     ChangeScene(GameState::MAIN_MENU);
 }
@@ -47,26 +51,26 @@ void SceneManager::ChangeScene(GameState::Scene newScene) {
     if (currentScene == newScene && currentSceneObject != nullptr) {
         return; // Already in this scene
     }
-    
+
     // Exit current scene
     if (currentSceneObject) {
         currentSceneObject->OnExit();
     }
-    
+
     CleanupCurrentScene();
-    
+
     // Update game state
     currentScene = newScene;
     gameState->scene = newScene;
-    
+
     // Create new scene
     currentSceneObject = CreateScene(newScene);
-    
+
     // Enter new scene
     if (currentSceneObject) {
         currentSceneObject->OnEnter(soundSystem);
     }
-    
+
     std::cout << "Scene changed to: " << (newScene == GameState::MAIN_MENU ? "MAIN_MENU" : "IN_GAME") << std::endl;
 }
 
