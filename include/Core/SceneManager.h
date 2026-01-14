@@ -10,14 +10,14 @@ class Scene;
 
 class SceneManager {
 public:
-    SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem);
+    SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem);
     ~SceneManager();
 
     // Scene management
     void ChangeScene(GameState::Scene newScene);
     void Update();
     void Draw();
-    
+
     // Getters
     GameState::Scene GetCurrentScene() const { return currentScene; }
     Scene* GetCurrentSceneObject() const { return currentSceneObject; }
@@ -26,6 +26,7 @@ private:
     GameState* gameState;
     EventSystem* eventSystem;
     SoundSystem* soundSystem;
+    CameraSystem* cameraSystem;
     GameState::Scene currentScene;
     Scene* currentSceneObject;
 

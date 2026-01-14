@@ -3,16 +3,17 @@
 #include "Common.h"
 #include "GameState.h"
 #include "EventSystem.h"
+#include "CameraSystem.h"
 #include "SoundSystem.h"
 
 // Base Scene class for polymorphic scene handling
 class Scene {
 public:
-    Scene(GameState* gameState, EventSystem* eventSystem) 
+    Scene(GameState* gameState, EventSystem* eventSystem)
         : gameState(gameState), eventSystem(eventSystem) {}
-    
+
     virtual ~Scene() = default;
-    
+
     // Pure virtual methods that each scene must implement
     virtual void Update() = 0;
     virtual void Draw() = 0;

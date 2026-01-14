@@ -2,7 +2,9 @@
 #include "GameState.h"
 #include "EventSystem.h"
 #include "SoundSystem.h"
+#include "CameraSystem.h"
 #include "SceneManager.h"
+#include <raylib.h>
 
 int main() {
     InitWindow(600, 900, "Jet Game");
@@ -10,10 +12,18 @@ int main() {
 
     SetTargetFPS(60);
 
+    // Initialize camer
+    Camera2D camera = { 0 };
+    camera.target = (Vector2){ 0.0f, 0.0f };
+    camera.offset = (Vector2){ 0.0f, 0.0f };
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+
     // Initialize core systems
     GameState gameState;
     EventSystem eventSystem;
     SoundSystem soundSystem;
+    CameraSystem cameraSystem(&camera, &eventSystem);
     soundSystem.SetVolume(gameState.settings.masterVolume);
     soundSystem.LoadSFX("shot", "assets/sound/BulletShoot.wav");
     soundSystem.LoadSFX("explosion", "assets/sound/Explosion.wav");
@@ -23,7 +33,7 @@ int main() {
     gameState.RegisterEvents(&eventSystem, &soundSystem);
 
     // Initialize scene manager
-    SceneManager sceneManager(&gameState, &eventSystem, &soundSystem);
+    SceneManager sceneManager(&gameState, &eventSystem, &soundSystem, &cameraSystem);
 
     std::cout << "Game initialized with Scene Manager" << std::endl;
 
@@ -33,7 +43,9 @@ int main() {
 
         // Render current scene
         BeginDrawing();
-        sceneManager.Draw();
+            BeginMode2D(camera);
+                sceneManager.Draw();
+            EndMode2D();
         EndDrawing();
     }
 

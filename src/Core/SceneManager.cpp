@@ -1,12 +1,13 @@
 #include "SceneManager.h"
+#include "GameState.h"
 #include "Scene.h"
 #include "MainMenuScene.h"
 #include "InGameScene.h"
 #include "SettingsScene.h"
 #include "TimeScale.h"
 
-SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem)
-    : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
+SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem)
+    : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), cameraSystem(cameraSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
 
     // Register scene change events
     eventSystem->Subscribe("ChangeToMainMenu", [this]() {
@@ -91,7 +92,7 @@ Scene* SceneManager::CreateScene(GameState::Scene sceneType) {
         case GameState::MAIN_MENU:
             return new MainMenuScene(gameState, eventSystem);
         case GameState::IN_GAME:
-            return new InGameScene(gameState, eventSystem);
+            return new InGameScene(gameState, eventSystem, cameraSystem);
         case GameState::SETTINGS:
             return new SettingsScene(gameState, eventSystem);
         default:

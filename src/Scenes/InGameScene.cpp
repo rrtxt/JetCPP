@@ -1,11 +1,12 @@
 #include "InGameScene.h"
+#include "CameraSystem.h"
 #include "SoundSystem.h"
 #include "Spawner.h"
 #include "TimeScale.h"
 #include "Enemy/EnemyTypes.h"
 
-InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem)
-    : Scene(gameState, eventSystem) {
+InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem, CameraSystem* cameraSystem)
+    : cameraSystem(cameraSystem), Scene(gameState, eventSystem) {
     InitializeGame();
 }
 
@@ -26,6 +27,8 @@ void InGameScene::Update() {
     if (uiSystem) {
         uiSystem->Update();
     }
+
+    cameraSystem->Update();
 }
 
 void InGameScene::Draw() {

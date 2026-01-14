@@ -3,6 +3,7 @@
 #include "Common.h"
 #include "EventSystem.h"
 #include "SoundSystem.h"
+#include "CameraSystem.h"
 
 // Game settings structure
 struct GameSettings {
@@ -52,7 +53,7 @@ public:
 
     GameState(bool isGameOver = false, int score = 0, int playerHealth = 3);
 
-    void RegisterEvents(EventSystem* es, SoundSystem* soundSystem);
+    void RegisterEvents(EventSystem* eventSystem, SoundSystem* soundSystem);
 
     // Settings management
     void ApplySettings(const GameSettings& newSettings);

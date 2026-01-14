@@ -80,6 +80,7 @@ void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
         cout << "Player Health: " << this->playerCurrentHealth << endl;
 
         ss->PlaySFX("player_hit");
+        es->Emit("CameraShake");
         es->Emit("OnHealthchanged");
     });
     es->Subscribe("OnHealthchanged", [&, es](){
