@@ -9,54 +9,44 @@
 GamewaveSystem::GamewaveSystem(GameState* state, Spawner* normal, Spawner* zigzag)
 : gameState(state), currentWaveIndex(0), normalSpawner(normal), zigzagSpawner(zigzag) {}
 
-void GamewaveSystem::AddWave(shared_ptr<Gamewave> wave) {
-    waves.push_back(wave);
-}
+// void GamewaveSystem::AddWave(shared_ptr<Gamewave> wave) {
+//     waves.push_back(wave);
+// }
 
 // Starts the wave system from the first wave
 void GamewaveSystem::Start() {
     currentWaveIndex = 0;
     isFinished = false;
-    if (!waves.empty()) {
-        waves[currentWaveIndex]->Start();
-    }
+    StartNextWave();
 }
 
 // Resets all waves in the system
 void GamewaveSystem::Reset() {
     currentWaveIndex = 0;
     isFinished = false;
-    for (auto& wave : waves) {
-        wave->Reset();
-    }
+    currentWave->Reset();
 }
 
 // Updates the current wave and progresses to the next wave
 void GamewaveSystem::Update(){
-    if (currentWaveIndex >= waves.size()) return;
+    if (!currentWave){
+        StartNextWave();
+        // currentWave = this->GenerateNextWave();
+        // currentWave->Start();
+        // return;
+    }
 
-    auto& current = waves[currentWaveIndex];
-    current->Update();
+    currentWave->Update();
 
     // Check if the current wave is completed
-    if(current->getIsCompleted()) {
-        std::cout << "Wave " << currentWaveIndex + 1 << " completed." << std::endl;
-        currentWaveIndex++;
-        // Start the next wave if available
-        if (currentWaveIndex < waves.size()) {
-            std::cout << "Starting wave " << currentWaveIndex + 1 << std::endl;
-            waves[currentWaveIndex]->Start();
-        } else {
-            isFinished = true;
-        }
+    if(currentWave->getIsCompleted()) {
+        std::cout << "Wave " << waveNumber + 1 << " completed." << std::endl;
+        StartNextWave();
     }
 }
 
 shared_ptr<Gamewave> GamewaveSystem::GetCurrentWave() {
-    if (currentWaveIndex < waves.size()) {
-        return waves[currentWaveIndex];
-    }
-    return nullptr;
+    return currentWave;
 }
 
 shared_ptr<Gamewave> GamewaveSystem::GenerateNextWave(){
@@ -78,16 +68,15 @@ shared_ptr<Gamewave> GamewaveSystem::GenerateNextWave(){
 }
 
 void GamewaveSystem::StartNextWave(){
-    auto nextWave = GenerateNextWave();
-    this->AddWave(nextWave);
-    currentWaveIndex++;
-    waves[currentWaveIndex]->Start();
+    currentWave = GenerateNextWave();
+    currentWave->Start();
+    return;
 }
 
 // Draws the current wave
 void GamewaveSystem::Draw() {
-    if (currentWaveIndex < waves.size()) {
-        waves[currentWaveIndex]->Draw();
+    if (currentWave) {
+        currentWave->Draw();
     }
 }
 

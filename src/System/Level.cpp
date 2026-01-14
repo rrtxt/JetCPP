@@ -35,6 +35,6 @@ void Level::InitFromJSON(nlohmann::json &data, EventSystem *es, GameState *gs) {
 
     auto wave = make_shared<Gamewave>(spawner.get(), maxEnemies, spawnInterval);
 
-    waveSystem->AddWave(wave);
+    // waveSystem->AddWave(wave);
   }
 }

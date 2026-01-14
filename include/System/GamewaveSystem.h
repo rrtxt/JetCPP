@@ -7,7 +7,7 @@
 
 class GamewaveSystem{
     private:
-        std::vector<shared_ptr<Gamewave>> waves;
+        shared_ptr<Gamewave> currentWave;
         GameState* gameState;
         int currentWaveIndex;
         bool isFinished = false;
@@ -19,7 +19,7 @@ class GamewaveSystem{
         int baseSpawnDelay = 1.0f;
 
         GamewaveSystem(GameState* gameState, Spawner* normalSpawner, Spawner* zigzagSpawner);
-        void AddWave(shared_ptr<Gamewave> wave);
+        // void AddWave(shared_ptr<Gamewave> wave);
         void Start();
         void Update();
         void Reset();
