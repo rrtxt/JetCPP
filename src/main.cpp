@@ -15,7 +15,9 @@ int main() {
     EventSystem eventSystem;
     SoundSystem soundSystem;
     soundSystem.SetVolume(gameState.settings.masterVolume);
-    // soundSystem.LoadSFX("shot", "assets/sound/BulletShoot.wav");
+    soundSystem.LoadSFX("shot", "assets/sound/BulletShoot.wav");
+    soundSystem.LoadSFX("explosion", "assets/sound/Explosion.wav");
+    soundSystem.LoadSFX("player_hit", "assets/sound/PlayerHit.wav");
 
     // Register game state events
     gameState.RegisterEvents(&eventSystem, &soundSystem);

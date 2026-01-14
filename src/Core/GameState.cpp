@@ -75,10 +75,11 @@ void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
     es->Subscribe("OnPlayerDied", [&]() {
         this->isGameOver = true;
     });
-    es->Subscribe("OnPlayerHit", [&, es]() {
+    es->Subscribe("OnPlayerHit", [&, es, ss]() {
         this->playerCurrentHealth -= 1;
         cout << "Player Health: " << this->playerCurrentHealth << endl;
 
+        ss->PlaySFX("player_hit");
         es->Emit("OnHealthchanged");
     });
     es->Subscribe("OnHealthchanged", [&, es](){
@@ -86,8 +87,9 @@ void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
             es->Emit("OnPlayerDied");
         }
     });
-    es->Subscribe("OnEnemyDestroyed", [&]() {
+    es->Subscribe("OnEnemyDestroyed", [&, ss]() {
         this->score += 100;
+        ss->PlaySFX("explosion");
     });
     es->Subscribe("OnBulletSpawn", [&, ss]() {
         std::cout << "Bullet Spawned, playing sound" << std::endl;

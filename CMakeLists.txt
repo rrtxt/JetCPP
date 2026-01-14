@@ -13,13 +13,24 @@ add_executable(raylib_jet_cpp
 )
 
 # CMake headers
-target_include_directories(raylib_jet_cpp PRIVATE 
+target_include_directories(raylib_jet_cpp PRIVATE
     include
     include/Core
     include/Entities
     include/Scenes
     include/System
     include/UI
+)
+
+# Copy assets from working directory
+# file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/assets" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/assets")
+add_custom_command(
+    TARGET raylib_jet_cpp
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/assets"
+        "$<TARGET_FILE_DIR:raylib_jet_cpp>/assets"
+    COMMENT "Copying assets to output directory"
 )
 
 # Tell CMake where to find raylib headers/libs
