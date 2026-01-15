@@ -8,6 +8,7 @@
 #include "CollisionSystem.h"
 #include "UISystem.h"
 #include <memory>
+#include <type_traits>
 
 class InGameScene : public Scene {
 public:
@@ -31,6 +32,6 @@ private:
 
     void InitializeGame();
     void UpdateGameLogic();
-    void HandleGameOver();
+    // void HandleGameOver();
     void ApplyGameSettings();
 };

@@ -1,9 +1,11 @@
 #include "UISystem.h"
 #include "HealthBarUIComponent.h"
+#include "PauseMenuUIComponent.h"
 #include "ScoreUIComponent.h"
 #include "GameOverUIComponent.h"
 #include "MainMenuUIComponent.h"
 #include "GameSettingUIComponent.h"
+#include <memory>
 
 UISystem::UISystem(GameState* gameState, EventSystem* eventSystem)
     : gameState(gameState), eventSystem(eventSystem) {
@@ -50,36 +52,37 @@ void UISystem::Update() {
 
 void UISystem::SetupInGameUI() {
     ClearComponents();
-    
+
     // Add in-game UI components
     AddComponent(std::make_unique<HealthBarUIComponent>(gameState));
     AddComponent(std::make_unique<ScoreUIComponent>(gameState));
-    
+
     if (eventSystem) {
         AddComponent(std::make_unique<GameOverUIComponent>(gameState, eventSystem));
+        AddComponent(std::make_unique<PauseMenuUIComponent>(gameState, eventSystem));
     }
-    
+
     std::cout << "In-game UI setup complete with " << GetComponentCount() << " components" << std::endl;
 }
 
 void UISystem::SetupMainMenuUI() {
     ClearComponents();
-    
+
     // Add main menu UI components
     if (eventSystem) {
         AddComponent(std::make_unique<MainMenuUIComponent>(gameState, eventSystem));
     }
-    
+
     std::cout << "Main menu UI setup complete with " << GetComponentCount() << " components" << std::endl;
 }
 
 void UISystem::SetupSettingsUI() {
     ClearComponents();
-    
+
     // Add settings UI components
     if (eventSystem) {
         AddComponent(std::make_unique<GameSettingUIComponent>(gameState, eventSystem));
     }
-    
+
     std::cout << "Settings UI setup complete with " << GetComponentCount() << " components" << std::endl;
 }

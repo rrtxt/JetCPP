@@ -4,6 +4,7 @@
 #include "EventSystem.h"
 #include "SoundSystem.h"
 #include "CameraSystem.h"
+#include "TimeScale.h"
 
 // Game settings structure
 struct GameSettings {
@@ -42,6 +43,7 @@ public:
     // Game state
     bool isShouldQuit = false;
     bool isGameOver;
+    bool isPaused = false;
     int score;
 
     // Player state

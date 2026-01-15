@@ -1,5 +1,6 @@
 #include "Enemy/ZigZagEnemy.h"
 #include "TimeScale.h"
+#include <raylib.h>
 
 ZigZagEnemy::ZigZagEnemy(float x, float y, GameState* gs) : IEnemy(x, y, gs), amplitude(50.0f), frequency(3.0f), initialX(x), elapsedTime(0.0f) {
 }
@@ -7,9 +8,9 @@ ZigZagEnemy::ZigZagEnemy(float x, float y, GameState* gs) : IEnemy(x, y, gs), am
 void ZigZagEnemy::Update() {
     if (active){
         // Move the enemy in a zigzag pattern
-        elapsedTime += GetFrameTime();
+        elapsedTime += GetFrameTime() * TimeScale::Get();
         position.y += speed * speedMultiplier * GetFrameTime() * TimeScale::Get();
-        position.x = initialX + amplitude * sin(frequency * elapsedTime);
+        position.x = initialX + amplitude * sin(frequency * elapsedTime) * TimeScale::Get();
 
         // Update collision box
         collision.x = position.x;

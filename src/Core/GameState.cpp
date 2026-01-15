@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "TimeScale.h"
 
 // GameSettings implementations
 float GameSettings::GetEnemySpeedMultiplier() const {
@@ -73,6 +74,7 @@ void GameState::ResetGameForNewSettings() {
 
 void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
     es->Subscribe("OnPlayerDied", [&]() {
+        TimeScale::Set(0);
         this->isGameOver = true;
     });
     es->Subscribe("OnPlayerHit", [&, es, ss]() {

@@ -5,6 +5,7 @@
 #include "InGameScene.h"
 #include "SettingsScene.h"
 #include "TimeScale.h"
+#include <cstdio>
 
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem)
     : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), cameraSystem(cameraSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
@@ -35,10 +36,10 @@ SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, Sound
         ChangeScene(GameState::IN_GAME);
     });
 
-    eventSystem->Subscribe("OnPlayerDied", [this]() {
-        // Reset time scale when player dies
-        TimeScale::Set(0);
-    });
+    // eventSystem->Subscribe("OnPlayerDied", [this]() {
+    //     // Reset time scale when player dies
+    //     TimeScale::Set(0);
+    // });
 
     // Initialize with main menu
     ChangeScene(GameState::MAIN_MENU);
@@ -49,9 +50,9 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::ChangeScene(GameState::Scene newScene) {
-    if (currentScene == newScene && currentSceneObject != nullptr) {
-        return; // Already in this scene
-    }
+    // if (currentScene == newScene && currentSceneObject != nullptr) {
+    //     return; // Already in this scene
+    // }
 
     // Exit current scene
     if (currentSceneObject) {

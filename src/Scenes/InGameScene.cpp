@@ -1,9 +1,12 @@
 #include "InGameScene.h"
 #include "CameraSystem.h"
+#include "GameState.h"
 #include "SoundSystem.h"
 #include "Spawner.h"
 #include "TimeScale.h"
 #include "Enemy/EnemyTypes.h"
+#include <cmath>
+#include <raylib.h>
 
 InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem, CameraSystem* cameraSystem)
     : cameraSystem(cameraSystem), Scene(gameState, eventSystem) {
@@ -19,9 +22,10 @@ void InGameScene::Update() {
         if (waveSystem && waveSystem->IsWaveFinished()) {
             std::cout << "All waves completed! Victory!" << std::endl;
         }
-    } else {
-        HandleGameOver();
     }
+    // else {
+    //     HandleGameOver();
+    // }
 
     // Update UI components
     if (uiSystem) {
@@ -50,11 +54,14 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
     // Sound initialization
     this->soundSystem = soundSystem;
     this->soundSystem->LoadSFX("shoot", "assets/sound/BulletShoot.wav");
+    this->soundSystem->LoadSFX("explosion", "assets/sound/Explosion.wav");
+    this->soundSystem->LoadSFX("player_hit", "assets/sound/PlayerHit.wav");
 
     // Reset time scale
     TimeScale::Set(1);
 
     // Reset game state
+    gameState->isPaused = false;
     gameState->isGameOver = false;
     gameState->score = 0;
     gameState->playerCurrentHealth = gameState->playerHealth;
@@ -82,6 +89,8 @@ void InGameScene::OnExit() {
     std::cout << "Exited In-Game Scene" << std::endl;
     soundSystem->StopMusic();
     soundSystem->UnloadSFX("shoot");
+    soundSystem->UnloadSFX("player_hit");
+    soundSystem->UnloadSFX("explosion");
     // Keep entities alive for potential return to game
 }
 
@@ -115,6 +124,12 @@ void InGameScene::UpdateGameLogic() {
     if (player) player->Update();
     if (waveSystem) waveSystem->Update();
 
+    // Handle Key
+    if (IsKeyPressed(KEY_ESCAPE)){
+        TimeScale::Set(gameState->isPaused);
+        gameState->isPaused = !gameState->isPaused;
+    }
+
     // Check collisions
     auto currentWave = waveSystem->GetCurrentWave();
     if (!currentWave) return;
@@ -134,18 +149,18 @@ void InGameScene::UpdateGameLogic() {
     // }
 }
 
-void InGameScene::HandleGameOver() {
-    // Restart game
-    if (IsKeyPressed(KEY_R)) {
-        // eventSystem->Emit("ChangeToInGame");
-        OnEnter(soundSystem);
-    }
+// void InGameScene::HandleGameOver() {
+//     // Restart game
+//     if (IsKeyPressed(KEY_R)) {
+//         // eventSystem->Emit("ChangeToInGame");
+//         OnEnter(soundSystem);
+//     }
 
-    if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
-        // Return to main menu
-        eventSystem->Emit("ChangeToMainMenu");
-    }
-}
+//     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
+//         // Return to main menu
+//         eventSystem->Emit("ChangeToMainMenu");
+//     }
+// }
 
 void InGameScene::ApplyGameSettings() {
     if (!player) return;

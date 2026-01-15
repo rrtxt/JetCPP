@@ -1,4 +1,5 @@
 #include "Gamewave.h"
+#include "TimeScale.h"
 
 Gamewave::Gamewave(Spawner* spawner, int totalEnemies, float spawnInterval)
     : spawner(spawner), totalEnemies(totalEnemies), spawnInterval(spawnInterval),
@@ -14,7 +15,7 @@ void Gamewave::Start() {
 void Gamewave::Update() {
     if (isCompleted) return;
 
-    spawnTimer += GetFrameTime();
+    spawnTimer += GetFrameTime() * TimeScale::Get();
     if (spawnedEnemies < totalEnemies && spawnTimer >= spawnInterval) {
         spawner->Spawn();
         spawnedEnemies++;
