@@ -1,15 +1,21 @@
-
 CompileFlags:
-  Compiler: C:/msys64/mingw64/bin/g++.exe
+  # Compiler: C:/msys64/mingw64/bin/g++.exe
+  CompilationDatabase: build
 
   Add: [
-    # C++ Standard Library
-    "-I", "C:/msys64/mingw64/include",
-    "-I", "C:/msys64/mingw64/include/c++/15.2.0",
-    "-I", "C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32",
+      # C++ Standard Library
+      "-I",
+      "C:/msys64/mingw64/include",
+      "-I",
+      "C:/msys64/mingw64/include/c++/15.2.0",
+      "-I",
+      "C:/msys64/mingw64/include/c++/15.2.0/x86_64-w64-mingw32",
 
-    # MinGW CRT (this fixes stdlib.h, stdio.h, errno.h, etc)
-    "-I", "C:/msys64/mingw64/x86_64-w64-mingw32/include",
-    -target, x86_64-w64-mingw32, -stdlib=libstdc++
-  ]
-
+      # MinGW CRT (this fixes stdlib.h, stdio.h, errno.h, etc)
+      "-I",
+      "C:/msys64/mingw64/x86_64-w64-mingw32/include",
+      -target,
+      x86_64-w64-mingw32,
+      # -stdlib=libstdc++
+      -std=c++20,
+    ]
