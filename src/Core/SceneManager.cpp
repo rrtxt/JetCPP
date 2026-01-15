@@ -5,7 +5,7 @@
 #include "InGameScene.h"
 #include "SettingsScene.h"
 #include "TimeScale.h"
-#include <cstdio>
+#include <type_traits>
 
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem)
     : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), cameraSystem(cameraSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
@@ -29,17 +29,13 @@ SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, Sound
 
     eventSystem->Subscribe("RestartGame", [this]() {
         // Reset game state and restart
+        this->gameState->isPaused = false;
         this->gameState->isGameOver = false;
         this->gameState->score = 0;
         this->gameState->playerCurrentHealth = this->gameState->playerHealth;
         TimeScale::Set(1);
         ChangeScene(GameState::IN_GAME);
     });
-
-    // eventSystem->Subscribe("OnPlayerDied", [this]() {
-    //     // Reset time scale when player dies
-    //     TimeScale::Set(0);
-    // });
 
     // Initialize with main menu
     ChangeScene(GameState::MAIN_MENU);
@@ -50,29 +46,8 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::ChangeScene(GameState::Scene newScene) {
-    // if (currentScene == newScene && currentSceneObject != nullptr) {
-    //     return; // Already in this scene
-    // }
-
-    // Exit current scene
-    if (currentSceneObject) {
-        currentSceneObject->OnExit();
-    }
-
-    CleanupCurrentScene();
-
-    // Update game state
-    currentScene = newScene;
-    gameState->scene = newScene;
-
-    // Create new scene
-    currentSceneObject = CreateScene(newScene);
-
-    // Enter new scene
-    if (currentSceneObject) {
-        currentSceneObject->OnEnter(soundSystem);
-    }
-
+    pendingScene = newScene;
+    hasPendingsSceneChange = true;
     std::cout << "Scene changed to: " << (newScene == GameState::MAIN_MENU ? "MAIN_MENU" : "IN_GAME") << std::endl;
 }
 
@@ -80,6 +55,8 @@ void SceneManager::Update() {
     if (currentSceneObject) {
         currentSceneObject->Update();
     }
+
+    ApplySceneChange();
 }
 
 void SceneManager::Draw() {
@@ -100,6 +77,29 @@ Scene* SceneManager::CreateScene(GameState::Scene sceneType) {
             std::cout << "Warning: Unknown scene type!" << std::endl;
             return nullptr;
     }
+}
+
+void SceneManager::ApplySceneChange(){
+    if (!hasPendingsSceneChange) return;
+
+    if (currentSceneObject) {
+        currentSceneObject->OnExit();
+        delete currentSceneObject;
+        currentSceneObject = nullptr;
+    }
+
+    currentScene = pendingScene;
+    gameState->scene = pendingScene;
+
+    currentSceneObject = CreateScene(pendingScene);
+
+    if (currentSceneObject){
+        currentSceneObject->OnEnter(soundSystem);
+    }
+
+    hasPendingsSceneChange = false;
+
+    std::cout << "Scene changed to: " << (pendingScene == GameState::MAIN_MENU ? "MAIN_MENU" : "IN_GAME") << std::endl;
 }
 
 void SceneManager::CleanupCurrentScene() {

@@ -28,9 +28,12 @@ private:
     SoundSystem* soundSystem;
     CameraSystem* cameraSystem;
     GameState::Scene currentScene;
+    GameState::Scene pendingScene;
+    bool hasPendingsSceneChange = false;
     Scene* currentSceneObject;
 
     // Scene creation
     Scene* CreateScene(GameState::Scene sceneType);
+    void ApplySceneChange();
     void CleanupCurrentScene();
 };
