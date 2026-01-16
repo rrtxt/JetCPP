@@ -3,6 +3,29 @@ project(raylib_jet_cpp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(BUILD_SHARED_LIBS OFF)
+
+# Dependencies
+set(RAYLIB_VERSION 5.5)
+find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
+if (NOT raylib_FOUND) # If there's none, fetch and build raylib
+    include(FetchContent)
+
+    set(RAYLIB_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(RAYLIB_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(RAYLIB_BUILD_GAMES OFF CACHE BOOL "" FORCE)
+
+    FetchContent_Declare(
+    raylib
+    DOWNLOAD_EXTRACT_TIMESTAMP OFF
+    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+  )
+    FetchContent_GetProperties(raylib)
+    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+        set(FETCHCONTENT_QUIET NO)
+        FetchContent_MakeAvailable(raylib)
+    endif()
+endif()
 
 # Collect all cpp files from src/
 file(GLOB_RECURSE SRC_MAIN src/*.cpp)
@@ -34,9 +57,7 @@ add_custom_command(
 )
 
 # Tell CMake where to find raylib headers/libs
-target_include_directories(raylib_jet_cpp PRIVATE external)
-target_link_directories(raylib_jet_cpp PRIVATE lib)
 target_precompile_headers(raylib_jet_cpp PRIVATE include/Common.h)
 
 # Link Raylib + Windows system libs
-target_link_libraries(raylib_jet_cpp raylib opengl32 gdi32 winmm)
+target_link_libraries(raylib_jet_cpp raylib)

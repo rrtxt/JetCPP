@@ -5,7 +5,6 @@
 #include "InGameScene.h"
 #include "SettingsScene.h"
 #include "TimeScale.h"
-#include <type_traits>
 
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem)
     : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), cameraSystem(cameraSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
