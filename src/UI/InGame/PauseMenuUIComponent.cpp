@@ -1,5 +1,4 @@
 #include "PauseMenuUIComponent.h"
-#include "Core/TimeScale.h"
 #include "raylib.h"
 
 PauseMenuUIComponent::PauseMenuUIComponent(
@@ -13,7 +12,7 @@ PauseMenuUIComponent::PauseMenuUIComponent(
     optionFontSize = 20;
 
     titleColor = BLACK;
-    optionColor = DARKGRAY;
+    optionColor = BLACK;
     backgroundColor = Fade(BLACK, 0.6f);
 
     // Hidden by default
@@ -90,12 +89,6 @@ void PauseMenuUIComponent::Draw() {
 }
 
 void PauseMenuUIComponent::HandleInput() {
-    // Resume
-    // if (IsKeyPressed(KEY_ESCAPE)) {
-    //     gameState->isPaused = false;
-    //     return;
-    // }
-
     // Restart
     if (IsKeyPressed(KEY_R)) {
         eventSystem->Emit("RestartGame");
