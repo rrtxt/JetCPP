@@ -115,6 +115,7 @@ void InGameScene::InitializeGame() {
     // Setup in-game UI components
     uiSystem->SetupInGameUI();
 
+    player->Start();
     waveSystem->Start();
 
     std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;

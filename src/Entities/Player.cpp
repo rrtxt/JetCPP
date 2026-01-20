@@ -2,6 +2,7 @@
 #include "IEntity.h"
 #include "TimeScale.h"
 #include "raylib.h"
+#include <cstdio>
 
 const int PLAYER_WIDTH = 25;
 const int PLAYER_HEIGHT = 25;
@@ -21,15 +22,16 @@ Player::Player(int width, int height, float x , float y, EventSystem* es) : IEnt
     maxHealth = 3;
     currentHealth = maxHealth;
     eventSystem = es;
+}
 
+void Player::Start(){
+    printf("Load player texture...");
     // load character texture
     sprite = LoadImage("assets/image/jet.png");
     characterTexture = LoadTextureFromImage(sprite);
     UnloadImage(sprite);
     SetTextureFilter(characterTexture, TEXTURE_FILTER_POINT);
 }
-
-void Player::Start(){ }
 
 void Player::Update() {
     // Movement
