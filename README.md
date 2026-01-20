@@ -7,6 +7,16 @@ This project was created to explore how games can be structured without relying 
 The goal of this project is learning-oriented: understanding game architecture, update loops, and system separation in a small but complete prototype.
 
 ---
+## Table of Contents
+
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure-high-level)
+- [Installation](#installation)
+- [Build Instructions (CMake)](#build-instructions-cmake)
+- [Notes](#notes)
+
+---
 
 ## Features
 
@@ -40,6 +50,14 @@ JetCPP/
 ├── CMakeLists.txt  # CMake build configuration
 └── README.md
 ```
+
+---
+
+## Installation
+1. Go to the **Releases** page on GitHub  
+2. Download the latest Windows release (`.zip`)  
+3. Extract the archive  
+4. Run the executable (`.exe`)  
 
 ---
 
