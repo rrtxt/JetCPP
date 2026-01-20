@@ -8,6 +8,7 @@
 #include "CollisionSystem.h"
 #include <cmath>
 #include <raylib.h>
+#include <vector>
 
 InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem, CameraSystem* cameraSystem)
     : cameraSystem(cameraSystem), Scene(gameState, eventSystem) {
@@ -116,6 +117,7 @@ void InGameScene::InitializeGame() {
     uiSystem->SetupInGameUI();
 
     player->Start();
+    std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
     waveSystem->Start();
 
     std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
@@ -136,11 +138,13 @@ void InGameScene::UpdateGameLogic() {
     auto currentWave = waveSystem->GetCurrentWave();
     if (!currentWave) return;
 
-    Spawner* currentSpawner = currentWave->GetSpawner();
-    if (!currentSpawner) return;
+    vector<Spawner*> currentSpawners = currentWave->GetSpawners();
+    if (currentSpawners.empty()) return;
 
-    CollisionSystem::CheckCollisionPlayerEnemy(*player, currentSpawner->enemies);
-    CollisionSystem::CheckCollisionBulletEnemy(player->bullets, currentSpawner->enemies);
+    for (auto& spawner : currentSpawners){
+        CollisionSystem::CheckCollisionPlayerEnemy(*player, spawner->enemies);
+        CollisionSystem::CheckCollisionBulletEnemy(player->bullets, spawner->enemies);
+    }
 
     // if (player && currentWave) {
     //     Spawner* currentSpawner = currentWave->GetSpawner();

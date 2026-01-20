@@ -1,15 +1,41 @@
 #include "Gamewave.h"
+#include "Spawner.h"
 #include "TimeScale.h"
+#include "raylib.h"
+#include <cstdio>
+#include <memory>
 
-Gamewave::Gamewave(Spawner* spawner, int totalEnemies, float spawnInterval)
-    : spawner(spawner), totalEnemies(totalEnemies), spawnInterval(spawnInterval),
+const int SPAWN_Y = -30;
+const int MIN_DISTANCE = 400;
+const int MARGIN = 50;
+
+Gamewave::Gamewave(int totalEnemies, float spawnInterval)
+    : totalEnemies(totalEnemies), spawnInterval(spawnInterval),
       spawnedEnemies(0), spawnTimer(0.0f), isCompleted(false) {}
 
 void Gamewave::Start() {
     spawnedEnemies = 0;
     spawnTimer = 0.0f;
     isCompleted = false;
-    spawner->Move(GetRandomValue(50, GetScreenWidth() - 50), -30);
+    // spawner->Move(GetRandomValue(50, GetScreenWidth() - 50), -30);
+    if (spawners.empty()) return;
+
+    int screenW = GetScreenWidth();
+    int x1 = 0;
+    int x2 = 0;
+
+    // Pick first spawner freely
+    x1 = GetRandomValue(MARGIN, screenW - MARGIN);
+
+    // Pick second spawner until distance is OK
+    do {
+        x2 = GetRandomValue(MARGIN, screenW - MARGIN);
+    } while (std::abs(x1 - x2) < MIN_DISTANCE);
+
+    printf("Move spawner 1 to %d, %d\n", x1, SPAWN_Y);
+    printf("Move spawner 2 to %d, %d\n", x2, SPAWN_Y);
+    spawners[0]->Move(x1, SPAWN_Y);
+    spawners[1]->Move(x2, SPAWN_Y);
 }
 
 void Gamewave::Update() {
@@ -17,14 +43,29 @@ void Gamewave::Update() {
 
     spawnTimer += GetFrameTime() * TimeScale::Get();
     if (spawnedEnemies < totalEnemies && spawnTimer >= spawnInterval) {
-        spawner->Spawn();
-        spawnedEnemies++;
+        for (auto& spawner : spawners){
+            if (spawnedEnemies >= totalEnemies) break;
+
+            spawner->Spawn();
+            spawnedEnemies++;
+        }
+
         spawnTimer = 0.0f;
     }
 
-    spawner->Update();
+    for (auto& spawner : spawners){
+        spawner->Update();
+    }
 
-    if (spawnedEnemies >= totalEnemies && spawner->enemies.empty()) {
+    bool isAllEmpty = true;
+    for (auto* spawner : spawners) {
+        if (!spawner->enemies.empty()) {
+            isAllEmpty = false;
+            break;
+        }
+    }
+
+    if (spawnedEnemies >= totalEnemies && isAllEmpty) {
         isCompleted = true;
     }
 }
@@ -33,13 +74,21 @@ void Gamewave::Reset() {
     spawnedEnemies = 0;
     spawnTimer = 0.0f;
     isCompleted = false;
-    spawner->Reset();
+    for (auto& spawner : spawners){
+        spawner->Reset();
+    }
 }
 
-Spawner* Gamewave::GetSpawner(){
-    return this->spawner;
+void Gamewave::AddSpawner(Spawner* spawner){
+    spawners.push_back(spawner);
+}
+
+const vector<Spawner*>& Gamewave::GetSpawners(){
+    return spawners;
 }
 
 void Gamewave::Draw() {
-    spawner->Draw();
+    for (auto& spawner : spawners){
+        spawner->Draw();
+    }
 }

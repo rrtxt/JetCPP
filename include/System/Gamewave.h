@@ -2,21 +2,25 @@
 
 #include "Common.h"
 #include "Spawner.h"
+#include <memory>
+#include <vector>
 
 class Gamewave {
     public:
-        Gamewave(Spawner* spawner, int totalEnemies, float spawnInterval);
+        Gamewave(int totalEnemies, float spawnInterval);
         void Start();
         void Update();
         void Draw();
         void Reset();
-        Spawner* GetSpawner();
+        void AddSpawner(Spawner* spawner);
+        const vector<Spawner*>& GetSpawners();
         bool getIsCompleted() const { return isCompleted; }
     private:
         Spawner* spawner;
+        std::vector<Spawner*> spawners;
         int totalEnemies;
         int spawnedEnemies;
         float spawnInterval;
-        float spawnTimer; 
+        float spawnTimer;
         bool isCompleted;
 };

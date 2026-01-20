@@ -3,8 +3,10 @@
 #include "GameState.h"
 #include "Gamewave.h"
 #include "Spawner.h"
-#include <complex>
+#include "raylib.h"
 #include <memory>
+
+const int MAX_SPAWNER = 2;
 
 GamewaveSystem::GamewaveSystem(GameState* state, Spawner* normal, Spawner* zigzag)
 : gameState(state), currentWaveIndex(0), normalSpawner(normal), zigzagSpawner(zigzag) {}
@@ -24,7 +26,9 @@ void GamewaveSystem::Start() {
 void GamewaveSystem::Reset() {
     currentWaveIndex = 0;
     isFinished = false;
-    currentWave->Reset();
+    if (currentWave){
+        currentWave->Reset();
+    }
 }
 
 // Updates the current wave and progresses to the next wave
@@ -54,21 +58,22 @@ shared_ptr<Gamewave> GamewaveSystem::GenerateNextWave(){
 
     int enemyCount = this->gameState->settings.GetEnemyMaxSpawnCount() + waveNumber * 2;
     float spawnDelay = std::max(0.2f, baseSpawnDelay - waveNumber * 0.05f);
-
-    EnemyType type;
-    if (waveNumber % 3 == 0){
-        type = EnemyType::ZIGZAG;
-    } else {
-        type = EnemyType::NORMAL;
-    }
-
-    Spawner* spawner = (type == EnemyType::ZIGZAG) ? zigzagSpawner : normalSpawner;
-
-    return make_shared<Gamewave>(spawner, enemyCount, spawnDelay);
+    return make_shared<Gamewave>(enemyCount, spawnDelay);
 }
 
 void GamewaveSystem::StartNextWave(){
     currentWave = GenerateNextWave();
+
+    int randomNum = 0;
+    for (int i = 0; i < MAX_SPAWNER; i++){
+        randomNum = GetRandomValue(0, 10);
+        if(randomNum > 7){
+            currentWave->AddSpawner(zigzagSpawner);
+        } else {
+            currentWave->AddSpawner(normalSpawner);
+        }
+    }
+
     currentWave->Start();
     return;
 }
