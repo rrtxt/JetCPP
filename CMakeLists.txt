@@ -61,3 +61,18 @@ target_precompile_headers(raylib_jet_cpp PRIVATE include/Common.h)
 
 # Link Raylib + Windows system libs
 target_link_libraries(raylib_jet_cpp raylib)
+
+if (MINGW)
+    target_link_options(raylib_jet_cpp PRIVATE
+        -static
+        -static-libgcc
+        -static-libstdc++
+    )
+endif()
+
+# Checks if OSX and links appropriate frameworks (Only required on MacOS)
+if (APPLE)
+    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
+    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
+    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+endif()
