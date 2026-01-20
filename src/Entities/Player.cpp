@@ -1,21 +1,31 @@
 #include "Player.h"
 #include "TimeScale.h"
+#include "raylib.h"
+
+const int PLAYER_WIDTH = 25;
+const int PLAYER_HEIGHT = 25;
+const float SPRITE_SCALE = 3.0f;
 
 Player::Player(int width, int height, float x , float y, EventSystem* es) {
     position.x = x;
     position.y = y;
     collision.x = x;
     collision.y = y;
-    collision.width = width;
-    collision.height = height;
-    size.x = width;
-    size.y = height;
+    collision.width = PLAYER_WIDTH;
+    collision.height = PLAYER_HEIGHT;
+    size.x = PLAYER_WIDTH;
+    size.y = PLAYER_HEIGHT;
     shootCooldown = 0;
     fireRate = 0.2f; // Seconds between shots
     maxHealth = 3;
     currentHealth = maxHealth;
-
     eventSystem = es;
+
+    // load character texture
+    sprite = LoadImage("assets/image/jet.png");
+    characterTexture = LoadTextureFromImage(sprite);
+    UnloadImage(sprite);
+    SetTextureFilter(characterTexture, TEXTURE_FILTER_POINT);
 }
 
 void Player::Update() {
@@ -42,7 +52,7 @@ void Player::Update() {
     // Shooting cooldown
     shootCooldown -= GetFrameTime() * TimeScale::Get();
     if (shootCooldown < 0) shootCooldown = 0;
-    
+
     // Shooting
     if (IsKeyDown(KEY_SPACE) && shootCooldown <= 0) {
         Bullet newBullet(position.x + size.x / 2 - 2.5f, position.y, eventSystem);
@@ -83,7 +93,33 @@ void Player::OnCollision() {
 }
 
 void Player::Draw() {
-    DrawRectangle(position.x, position.y, size.x, size.y, RED);
+    DrawRectangleLines(position.x, position.y, size.x, size.y, RED);
+    // DrawTexture(characterTexture, position.x, position.y, WHITE);
+    Rectangle source = {
+        0, 0,
+        (float)characterTexture.width,
+        (float)characterTexture.height
+    };
+
+    Rectangle dest = {
+        position.x + size.x / 2.0f,
+        position.y + size.y / 2.0f,
+        characterTexture.width * SPRITE_SCALE,
+        characterTexture.height * SPRITE_SCALE
+    };
+
+    Vector2 origin = {
+        dest.width / 2,
+        dest.height / 2
+    };
+    DrawTexturePro(
+                characterTexture,
+                source,
+                dest,
+                origin,
+                0.0f,
+                WHITE
+    );
     for(auto& bullet : bullets) {
         bullet.Draw();
     }

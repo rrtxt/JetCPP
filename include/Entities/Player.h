@@ -3,9 +3,14 @@
 #include "Common.h"
 #include "EventSystem.h"
 #include "Bullet.h"
+#include "raylib.h"
 
 class Player {
 public:
+    // Player sprite
+    Image sprite;
+    Texture2D characterTexture;
+
     // Coordinates and size
     Vector2 position;
     Vector2 size;
