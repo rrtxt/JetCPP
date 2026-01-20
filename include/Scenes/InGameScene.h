@@ -5,10 +5,8 @@
 #include "Player.h"
 #include "Spawner.h"
 #include "GamewaveSystem.h"
-#include "CollisionSystem.h"
 #include "UISystem.h"
 #include <memory>
-#include <type_traits>
 
 class InGameScene : public Scene {
 public:

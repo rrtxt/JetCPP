@@ -2,8 +2,9 @@
 
 #include "Common.h"
 #include "GameState.h"
+#include "IEntity.h"
 
-class IEnemy {
+class IEnemy : public IEntity {
     public:
         Vector2 position;
         Vector2 size;
@@ -15,8 +16,9 @@ class IEnemy {
 
         IEnemy(float x, float y, GameState* gs);
         virtual ~IEnemy() = default;
-        
-        virtual void Update() = 0;
-        virtual void Draw() = 0;
-        virtual void OnCollision() = 0;
+
+        void Start() override = 0 ;
+        void Update() override = 0;
+        void Draw() override = 0;
+        void OnCollision(IEntity& other) override = 0;
 };

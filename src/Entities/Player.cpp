@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "IEntity.h"
 #include "TimeScale.h"
 #include "raylib.h"
 
@@ -6,7 +7,7 @@ const int PLAYER_WIDTH = 25;
 const int PLAYER_HEIGHT = 25;
 const float SPRITE_SCALE = 3.0f;
 
-Player::Player(int width, int height, float x , float y, EventSystem* es) {
+Player::Player(int width, int height, float x , float y, EventSystem* es) : IEntity() {
     position.x = x;
     position.y = y;
     collision.x = x;
@@ -27,6 +28,8 @@ Player::Player(int width, int height, float x , float y, EventSystem* es) {
     UnloadImage(sprite);
     SetTextureFilter(characterTexture, TEXTURE_FILTER_POINT);
 }
+
+void Player::Start(){ }
 
 void Player::Update() {
     // Movement
@@ -81,7 +84,7 @@ void Player::Update() {
     collision.y = position.y;
 }
 
-void Player::OnCollision() {
+void Player::OnCollision(IEntity& other) {
     if (currentHealth > 1) {
         eventSystem->Emit("OnPlayerHit");
     } else {

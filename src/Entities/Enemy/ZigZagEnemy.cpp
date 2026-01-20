@@ -1,9 +1,12 @@
 #include "Enemy/ZigZagEnemy.h"
+#include "IEntity.h"
 #include "TimeScale.h"
 #include <raylib.h>
 
 ZigZagEnemy::ZigZagEnemy(float x, float y, GameState* gs) : IEnemy(x, y, gs), amplitude(50.0f), frequency(3.0f), initialX(x), elapsedTime(0.0f) {
 }
+
+void ZigZagEnemy::Start(){}
 
 void ZigZagEnemy::Update() {
     if (active){
@@ -23,7 +26,7 @@ void ZigZagEnemy::Update() {
     }
 }
 
-void ZigZagEnemy::OnCollision() {
+void ZigZagEnemy::OnCollision(IEntity& other) {
     if (active) {
         active = false;
     }

@@ -4,8 +4,9 @@
 #include "EventSystem.h"
 #include "Bullet.h"
 #include "raylib.h"
+#include "IEntity.h"
 
-class Player {
+class Player : public IEntity {
 public:
     // Player sprite
     Image sprite;
@@ -30,7 +31,8 @@ public:
     EventSystem* eventSystem;
 
     Player(int width, int height, float x , float y, EventSystem* es);
-    void Update();
-    void OnCollision();
-    void Draw();
+    void Start() override;
+    void Update() override;
+    void OnCollision(IEntity& other) override;
+    void Draw() override;
 };

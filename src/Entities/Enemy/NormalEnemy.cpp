@@ -1,9 +1,12 @@
 #include "Enemy/NormalEnemy.h"
+#include "IEntity.h"
 #include "TimeScale.h"
 
 NormalEnemy::NormalEnemy(float x, float y, GameState* gs) : IEnemy(x, y, gs) {
     speedMultiplier = gameState->settings.GetEnemySpeedMultiplier();
 }
+
+void NormalEnemy::Start(){}
 
 void NormalEnemy::Update() {
     if(active) {
@@ -12,7 +15,7 @@ void NormalEnemy::Update() {
 
         // Update collision box
         collision.y = position.y;
-        
+
         // Set inactive if off-screen
         if(position.y > GetScreenHeight()) {
             active = false;
@@ -20,7 +23,7 @@ void NormalEnemy::Update() {
     }
 }
 
-void NormalEnemy::OnCollision() {
+void NormalEnemy::OnCollision(IEntity& other) {
     if (active) {
         active = false;
     }

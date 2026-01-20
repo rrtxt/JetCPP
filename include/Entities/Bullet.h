@@ -3,8 +3,9 @@
 #include "Common.h"
 #include "EventSystem.h"
 #include "Enemy/IEnemy.h"
+#include "IEntity.h"
 
-class Bullet {
+class Bullet : public IEntity{
 public:
     Vector2 position;
     Rectangle collision;
@@ -15,7 +16,8 @@ public:
     EventSystem* eventSystem;
 
     Bullet(float x, float y, EventSystem* es);
-    void Update();
-    void OnCollision(IEnemy& enemy);
-    void Draw();
+    void Start() override;
+    void Update() override;
+    void OnCollision(IEntity& other) override;
+    void Draw() override;
 };
