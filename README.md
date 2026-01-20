@@ -36,7 +36,7 @@ The goal of this project is learning-oriented: understanding game architecture, 
 * **Language:** C++
 * **Framework:** Raylib
 * **Build System:** CMake
-* **Compiler:** Any C++17-compatible compiler (GCC / Clang / MSVC)
+* **Compiler:** MinGW (Windows)
 
 ---
 
@@ -54,6 +54,8 @@ JetCPP/
 ---
 
 ## Installation
+The prebuilt release is compiled using **MinGW** and is intended to run on Windows systems.
+
 1. Go to the **Releases** page on GitHub  
 2. Download the latest Windows release (`.zip`)  
 3. Extract the archive  
@@ -65,9 +67,9 @@ JetCPP/
 
 ### Prerequisites
 
+* Windows
 * CMake 3.15 or newer
-* C++ compiler with C++17 support
-* Raylib installed on your system
+* MinGW (C++17 support required)
 
 ### Build Steps
 
@@ -86,7 +88,8 @@ After a successful build, the executable will be generated inside the `build` di
 
 ## Notes
 
-This project is a **prototype**, not a full game.
-The code prioritizes clarity and learning over performance optimization or advanced engine features.
+1. This project is a **prototype**, not a full game.
+2. The code prioritizes clarity and learning over performance optimization or advanced engine features.
+3. At the moment, the project is only tested and supported using **MinGW** on Windows. Other compilers (MSVC / Clang) may require additional configuration.
 
 ---
