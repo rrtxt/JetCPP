@@ -49,5 +49,5 @@ jobs:
     - name: Upload EXE + assets
       uses: actions/upload-artifact@v4
       with:
-        name: JetCPP-Windows
+        name: JetCPP-Windows-${{github.run_number}}
         path: package/
