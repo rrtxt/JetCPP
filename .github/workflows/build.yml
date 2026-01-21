@@ -38,3 +38,16 @@ jobs:
       with:
         name: JetCPP-Windows
         path: build/
+
+    - name: Prepare package
+      shell: bash
+      run: |
+        mkdir package
+        cp build/*.exe package/
+        cp -r assets package/assets
+
+    - name: Upload EXE + assets
+      uses: actions/upload-artifact@v4
+      with:
+        name: JetCPP-Windows
+        path: package/
