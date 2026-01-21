@@ -12,12 +12,12 @@ class Gamewave {
         void Update();
         void Draw();
         void Reset();
-        void AddSpawner(Spawner* spawner);
-        const vector<Spawner*>& GetSpawners();
+        void AddSpawner(unique_ptr<Spawner> spawner);
+        const vector<unique_ptr<Spawner>>& GetSpawners() const;
         bool getIsCompleted() const { return isCompleted; }
     private:
         Spawner* spawner;
-        std::vector<Spawner*> spawners;
+        std::vector<unique_ptr<Spawner>> spawners;
         int totalEnemies;
         int spawnedEnemies;
         float spawnInterval;

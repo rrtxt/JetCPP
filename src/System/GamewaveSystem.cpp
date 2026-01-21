@@ -68,9 +68,9 @@ void GamewaveSystem::StartNextWave(){
     for (int i = 0; i < MAX_SPAWNER; i++){
         randomNum = GetRandomValue(0, 10);
         if(randomNum > 7){
-            currentWave->AddSpawner(zigzagSpawner);
+            currentWave->AddSpawner(zigzagSpawner->Clone());
         } else {
-            currentWave->AddSpawner(normalSpawner);
+            currentWave->AddSpawner(normalSpawner->Clone());
         }
     }
 

@@ -5,6 +5,7 @@
 #include "Enemy/IEnemy.h"
 #include "Enemy/EnemyTypes.h"
 #include "GameState.h"
+#include <memory>
 
 class Spawner {
 public:
@@ -17,11 +18,12 @@ public:
     float spawnRateMultiplier;
     float spawnSpread;
     EnemyType enemyType;
-    
+
     Spawner(float x, float y, EnemyType enemyType, EventSystem* es, GameState* gs);
     void Update();
     void Spawn();
     void Draw();
     void Reset();
     void Move(float x, float y);
+    unique_ptr<Spawner> Clone() const;
 };

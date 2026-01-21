@@ -3,6 +3,7 @@
 #include "TimeScale.h"
 #include "raylib.h"
 #include <cstdio>
+#include <utility>
 #include <memory>
 
 const int SPAWN_Y = -30;
@@ -58,7 +59,7 @@ void Gamewave::Update() {
     }
 
     bool isAllEmpty = true;
-    for (auto* spawner : spawners) {
+    for (const auto& spawner : spawners) {
         if (!spawner->enemies.empty()) {
             isAllEmpty = false;
             break;
@@ -79,11 +80,11 @@ void Gamewave::Reset() {
     }
 }
 
-void Gamewave::AddSpawner(Spawner* spawner){
-    spawners.push_back(spawner);
+void Gamewave::AddSpawner(unique_ptr<Spawner> spawner){
+    spawners.push_back(std::move(spawner));
 }
 
-const vector<Spawner*>& Gamewave::GetSpawners(){
+const vector<unique_ptr<Spawner>>& Gamewave::GetSpawners() const{
     return spawners;
 }
 

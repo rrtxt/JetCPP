@@ -1,13 +1,13 @@
 #include "Spawner.h"
-#include "TimeScale.h"
 #include "Enemy/NormalEnemy.h"
 #include "Enemy/ZigZagEnemy.h"
 #include "Enemy/EnemyTypes.h"
+#include <memory>
 
 Spawner::Spawner(float x, float y, EnemyType enemyType, EventSystem* es, GameState* gs) {
     position.x = x;
     position.y = y;
-    eventSystem = es;   
+    eventSystem = es;
     this->enemyType = enemyType;
     gameState = gs;
     maxEnemies =  gameState->settings.GetEnemyMaxSpawnCount();
@@ -24,6 +24,8 @@ void Spawner::Draw() {
 }
 
 void Spawner::Spawn() {
+    if (spawnCount >= maxEnemies) return;
+
     std::unique_ptr<IEnemy> newEnemy;
     std::cout << "Spawning enemy of type: " << static_cast<int>(enemyType) << std::endl;
     switch (enemyType) {
@@ -61,4 +63,22 @@ void Spawner::Move(float x, float y) {
 void Spawner::Reset() {
     enemies.clear();
     spawnCount = 0;
+}
+
+unique_ptr<Spawner> Spawner::Clone() const {
+    auto clone = make_unique<Spawner>(
+        position.x,
+        position.y,
+        enemyType,
+        eventSystem,
+        gameState
+    );
+
+    clone->maxEnemies = maxEnemies;
+    clone->spawnRateMultiplier = spawnRateMultiplier;
+    clone->spawnSpread = spawnSpread;
+    clone->spawnCount = 0;
+    clone->enemies.clear();
+
+    return clone;
 }

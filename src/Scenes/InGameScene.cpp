@@ -7,6 +7,7 @@
 #include "Enemy/EnemyTypes.h"
 #include "CollisionSystem.h"
 #include <cmath>
+#include <memory>
 #include <raylib.h>
 #include <vector>
 
@@ -138,7 +139,7 @@ void InGameScene::UpdateGameLogic() {
     auto currentWave = waveSystem->GetCurrentWave();
     if (!currentWave) return;
 
-    vector<Spawner*> currentSpawners = currentWave->GetSpawners();
+    const auto& currentSpawners = currentWave->GetSpawners();
     if (currentSpawners.empty()) return;
 
     for (auto& spawner : currentSpawners){
