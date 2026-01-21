@@ -4,22 +4,25 @@ on:
   push:
     branches: [main]
 
+env:
+  BUILD_TYPE: Release
+
 jobs:
-  builds-windows:
+  builds:
     runs-on: windows-latest
 
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@4
 
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE${{env.BUILD_TYPE}}
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE${{env.BUILD_TYPE}}
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    - name: Upload build artifact
-      uses: actions/upload-artifact@4
-      with:
-        name: JetCPP-Windows
-        path: build/
+      - name: Upload build artifact
+        uses: actions/upload-artifact@4
+        with:
+          name: JetCPP-Windows
+          path: build/
