@@ -3,9 +3,13 @@
 #include "Common.h"
 #include "GameState.h"
 #include "IEntity.h"
+#include "raylib.h"
 
 class IEnemy : public IEntity {
     public:
+        Image sprite;
+        Texture2D texture;
+
         Vector2 position;
         Vector2 size;
         Rectangle collision;

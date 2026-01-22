@@ -43,6 +43,7 @@ target_include_directories(raylib_jet_cpp PRIVATE
     include/Scenes
     include/System
     include/UI
+    include/Events
 )
 
 # Copy assets from working directory

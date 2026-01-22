@@ -39,6 +39,7 @@ void Spawner::Spawn() {
             newEnemy = std::make_unique<NormalEnemy>(position.x + GetRandomValue(-1 * spawnSpread, spawnSpread), position.y, gameState);
             break;
     }
+    newEnemy->Start();
     newEnemy->active = true;
     enemies.push_back(std::move(newEnemy));
     spawnCount++;

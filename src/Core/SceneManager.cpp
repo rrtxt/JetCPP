@@ -9,33 +9,6 @@
 SceneManager::SceneManager(GameState* gameState, EventSystem* eventSystem, SoundSystem* soundSystem, CameraSystem* cameraSystem)
     : gameState(gameState), eventSystem(eventSystem), soundSystem(soundSystem), cameraSystem(cameraSystem), currentScene(GameState::MAIN_MENU), currentSceneObject(nullptr) {
 
-    // Register scene change events
-    eventSystem->Subscribe("ChangeToMainMenu", [this]() {
-        ChangeScene(GameState::MAIN_MENU);
-    });
-
-    eventSystem->Subscribe("ChangeToInGame", [this]() {
-        ChangeScene(GameState::IN_GAME);
-    });
-
-    eventSystem->Subscribe("ChangeToSettings", [this]() {
-        ChangeScene(GameState::SETTINGS);
-    });
-
-    eventSystem->Subscribe("QuitGame", [&]() {
-        this->gameState->isShouldQuit = true;
-    });
-
-    eventSystem->Subscribe("RestartGame", [this]() {
-        // Reset game state and restart
-        this->gameState->isPaused = false;
-        this->gameState->isGameOver = false;
-        this->gameState->score = 0;
-        this->gameState->playerCurrentHealth = this->gameState->playerHealth;
-        TimeScale::Set(1);
-        ChangeScene(GameState::IN_GAME);
-    });
-
     // Initialize with main menu
     ChangeScene(GameState::MAIN_MENU);
 }

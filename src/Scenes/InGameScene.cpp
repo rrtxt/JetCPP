@@ -99,7 +99,7 @@ void InGameScene::OnExit() {
 
 void InGameScene::InitializeGame() {
     // Create game entities with settings applied
-    player = std::make_unique<Player>(25, 40, GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
+    player = std::make_unique<Player>(GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
     normalSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
     zigzagSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::ZIGZAG, eventSystem, gameState);
 

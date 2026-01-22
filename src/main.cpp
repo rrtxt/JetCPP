@@ -1,4 +1,6 @@
 #include "Common.h"
+#include "Events/GameStateEvents.h"
+#include "GameSceneEvents.h"
 #include "GameState.h"
 #include "EventSystem.h"
 #include "SoundSystem.h"
@@ -26,15 +28,15 @@ int main() {
     SoundSystem soundSystem;
     CameraSystem cameraSystem(&camera, &eventSystem);
     soundSystem.SetVolume(gameState.settings.masterVolume);
-    // soundSystem.LoadSFX("shot", "assets/sound/BulletShoot.wav");
-    // soundSystem.LoadSFX("explosion", "assets/sound/Explosion.wav");
-    // soundSystem.LoadSFX("player_hit", "assets/sound/PlayerHit.wav");
-
-    // Register game state events
-    gameState.RegisterEvents(&eventSystem, &soundSystem);
 
     // Initialize scene manager
     SceneManager sceneManager(&gameState, &eventSystem, &soundSystem, &cameraSystem);
+
+    // Register game state events
+    // gameState.RegisterEvents(&eventSystem, &soundSystem);
+    GameStateEvents::Register(&eventSystem, &gameState, &soundSystem);
+    GameSceneEvents::Register(&eventSystem, &sceneManager, &gameState);
+
 
     std::cout << "Game initialized with Scene Manager" << std::endl;
 

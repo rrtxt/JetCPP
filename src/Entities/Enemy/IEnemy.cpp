@@ -6,11 +6,11 @@ IEnemy::IEnemy(float x, float y, GameState* gs) {
     position.y = y;
     collision.x = x;
     collision.y = y;
-    collision.width = 30;
-    collision.height = 30;
-    size.x = 30;
-    size.y = 30;
-    speed = 200;
+    collision.width = ENEMY_WIDTH;
+    collision.height = ENEMY_HEIGHT;
+    size.x = ENEMY_WIDTH;
+    size.y = ENEMY_HEIGHT;
+    speed = ENEMY_SPEED;
     active = true;
     gameState = gs;
     speedMultiplier = gameState->settings.GetEnemySpeedMultiplier();

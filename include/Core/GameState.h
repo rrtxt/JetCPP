@@ -55,8 +55,6 @@ public:
 
     GameState(bool isGameOver = false, int score = 0, int playerHealth = 3);
 
-    void RegisterEvents(EventSystem* eventSystem, SoundSystem* soundSystem);
-
     // Settings management
     void ApplySettings(const GameSettings& newSettings);
     void ResetGameForNewSettings();

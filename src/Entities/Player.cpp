@@ -4,11 +4,7 @@
 #include "raylib.h"
 #include <cstdio>
 
-const int PLAYER_WIDTH = 25;
-const int PLAYER_HEIGHT = 25;
-const float SPRITE_SCALE = 3.0f;
-
-Player::Player(int width, int height, float x , float y, EventSystem* es) : IEntity() {
+Player::Player(float x , float y, EventSystem* es) : IEntity() {
     position.x = x;
     position.y = y;
     collision.x = x;
@@ -28,9 +24,9 @@ void Player::Start(){
     printf("Load player texture...");
     // load character texture
     sprite = LoadImage("assets/image/jet.png");
-    characterTexture = LoadTextureFromImage(sprite);
+    texture = LoadTextureFromImage(sprite);
     UnloadImage(sprite);
-    SetTextureFilter(characterTexture, TEXTURE_FILTER_POINT);
+    SetTextureFilter(texture, TEXTURE_FILTER_POINT);
 }
 
 void Player::Update() {
@@ -102,15 +98,15 @@ void Player::Draw() {
     // DrawTexture(characterTexture, position.x, position.y, WHITE);
     Rectangle source = {
         0, 0,
-        (float)characterTexture.width,
-        (float)characterTexture.height
+        (float)texture.width,
+        (float)texture.height
     };
 
     Rectangle dest = {
         position.x + size.x / 2.0f,
         position.y + size.y / 2.0f,
-        characterTexture.width * SPRITE_SCALE,
-        characterTexture.height * SPRITE_SCALE
+        texture.width * SPRITE_SCALE,
+        texture.height * SPRITE_SCALE
     };
 
     Vector2 origin = {
@@ -118,13 +114,14 @@ void Player::Draw() {
         dest.height / 2
     };
     DrawTexturePro(
-                characterTexture,
+                texture,
                 source,
                 dest,
                 origin,
                 0.0f,
                 WHITE
     );
+
     for(auto& bullet : bullets) {
         bullet.Draw();
     }

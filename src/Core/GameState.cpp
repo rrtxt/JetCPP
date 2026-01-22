@@ -71,31 +71,3 @@ void GameState::ResetGameForNewSettings() {
     playerHealth = settings.GetPlayerStartingHealth();
     playerCurrentHealth = playerHealth;
 }
-
-void GameState::RegisterEvents(EventSystem* es, SoundSystem* ss) {
-    es->Subscribe("OnPlayerDied", [&]() {
-        TimeScale::Set(0);
-        this->isGameOver = true;
-    });
-    es->Subscribe("OnPlayerHit", [&, es, ss]() {
-        this->playerCurrentHealth -= 1;
-        cout << "Player Health: " << this->playerCurrentHealth << endl;
-
-        ss->PlaySFX("player_hit");
-        es->Emit("CameraShake");
-        es->Emit("OnHealthchanged");
-    });
-    es->Subscribe("OnHealthchanged", [&, es](){
-        if(this->playerCurrentHealth <= 0){
-            es->Emit("OnPlayerDied");
-        }
-    });
-    es->Subscribe("OnEnemyDestroyed", [&, ss]() {
-        this->score += 100;
-        ss->PlaySFX("explosion");
-    });
-    es->Subscribe("OnBulletSpawn", [&, ss]() {
-        std::cout << "Bullet Spawned, playing sound" << std::endl;
-        ss->PlaySFX("shoot");
-    });
-}

@@ -10,7 +10,7 @@ class Player : public IEntity {
 public:
     // Player sprite
     Image sprite;
-    Texture2D characterTexture;
+    Texture2D texture;
 
     // Coordinates and size
     Vector2 position;
@@ -30,7 +30,7 @@ public:
     // Events
     EventSystem* eventSystem;
 
-    Player(int width, int height, float x , float y, EventSystem* es);
+    Player(float x , float y, EventSystem* es);
     void Start() override;
     void Update() override;
     void OnCollision(IEntity& other) override;
