@@ -2,52 +2,110 @@ name: Build JetCPP
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{matrix.os}}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup MSYS2
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: >
-          mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-make
+      # --------------------
+      # WINDOWS (MSYS2)
+      # --------------------
+      - name: Setup MSYS2 (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
 
-    - name: Configure
-      shell: msys2 {0}
-      run: |
-        cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
 
-    - name: Build
-      shell: msys2 {0}
-      run: |
-        cmake --build build
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          cmake --build build
 
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: JetCPP-Windows
-        path: build/
+      # --------------------
+      # LINUX
+      # --------------------
+      - name: Install deps (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            build-essential \
+            libx11-dev \
+            libxcursor-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxi-dev \
+            libgl1-mesa-dev \
+            libasound2-dev
 
-    - name: Prepare package
-      shell: bash
-      run: |
-        mkdir package
-        cp build/*.exe package/
-        cp -r build/assets package/assets
+      - name: Configure (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
-    - name: Upload EXE + assets
-      uses: actions/upload-artifact@v4
-      with:
-        name: JetCPP-Windows-${{github.run_number}}
-        path: package/
+      - name: Build (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cmake --build build
+
+      # --------------------
+      # MACOS
+      # --------------------
+      - name: Install deps (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install cmake
+
+      - name: Configure (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          cmake --build build
+
+      # --------------------
+      # PACKAGE
+      # --------------------
+      - name: Prepare package
+        shell: bash
+        run: |
+          mkdir package
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            cp build/*.exe package/
+          else
+            cp build/raylib_jet_cpp package/
+          fi
+          cp -r build/assets package/assets
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JetCPP-${{ runner.os }}-${{github.run_number}}
+          path: package/
+          overwrite: true
