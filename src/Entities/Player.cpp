@@ -94,7 +94,7 @@ void Player::OnCollision(IEntity& other) {
 }
 
 void Player::Draw() {
-    DrawRectangleLines(position.x, position.y, size.x, size.y, RED);
+    // DrawRectangleLines(position.x, position.y, size.x, size.y, RED);
     // DrawTexture(characterTexture, position.x, position.y, WHITE);
     Rectangle source = {
         0, 0,

@@ -39,32 +39,32 @@ void ZigZagEnemy::OnCollision(IEntity& other) {
 
 void ZigZagEnemy::Draw() {
     if (active) {
-        DrawRectangleLines(position.x, position.y, size.x, size.y, BLUE);
-                // DrawTexture(characterTexture, position.x, position.y, WHITE);
-                Rectangle source = {
-                    0, 0,
-                    (float)texture.width,
-                    (float)texture.height
-                };
+        // DrawRectangleLines(position.x, position.y, size.x, size.y, BLUE);
+        // DrawTexture(characterTexture, position.x, position.y, WHITE);
+        Rectangle source = {
+            0, 0,
+            (float)texture.width,
+            (float)texture.height
+        };
 
-                Rectangle dest = {
-                    position.x + size.x / 2.0f,
-                    position.y + size.y / 2.0f,
-                    texture.width * SPRITE_SCALE,
-                    texture.height * SPRITE_SCALE
-                };
+        Rectangle dest = {
+            position.x + size.x / 2.0f,
+            position.y + size.y / 2.0f,
+            texture.width * SPRITE_SCALE,
+            texture.height * SPRITE_SCALE
+        };
 
-                Vector2 origin = {
-                    dest.width / 2,
-                    dest.height / 2
-                };
-                DrawTexturePro(
-                            texture,
-                            source,
-                            dest,
-                            origin,
-                            0.0f,
-                            WHITE
-                );
+        Vector2 origin = {
+            dest.width / 2,
+            dest.height / 2
+        };
+        DrawTexturePro(
+                    texture,
+                    source,
+                    dest,
+                    origin,
+                    0.0f,
+                    WHITE
+        );
     }
 }

@@ -37,7 +37,7 @@ void NormalEnemy::OnCollision(IEntity& other) {
 
 void NormalEnemy::Draw() {
     if(active) {
-        DrawRectangleLines(position.x, position.y, size.x, size.y, BLUE);
+        // DrawRectangleLines(position.x, position.y, size.x, size.y, BLUE);
         // DrawTexture(characterTexture, position.x, position.y, WHITE);
         Rectangle source = {
             0, 0,
