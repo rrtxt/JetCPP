@@ -6,10 +6,11 @@
 #include "SoundSystem.h"
 #include "CameraSystem.h"
 #include "SceneManager.h"
+#include <cmath>
 #include <raylib.h>
 
 int main() {
-    InitWindow(600, 900, "Jet Game");
+    InitWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, "Jet Game");
     SetExitKey(KEY_NULL);
     InitAudioDevice();
 
@@ -37,6 +38,8 @@ int main() {
     GameStateEvents::Register(&eventSystem, &gameState, &soundSystem);
     GameSceneEvents::Register(&eventSystem, &sceneManager, &gameState);
 
+    // Set virtual viewport
+    RenderTexture2D worldTarget = LoadRenderTexture(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
 
     std::cout << "Game initialized with Scene Manager" << std::endl;
 
@@ -45,10 +48,34 @@ int main() {
         sceneManager.Update();
 
         // Render current scene
-        BeginDrawing();
+        BeginTextureMode(worldTarget);
+            ClearBackground(RAYWHITE);
             BeginMode2D(camera);
                 sceneManager.Draw();
             EndMode2D();
+        EndTextureMode();
+
+        float scale = fmin(
+            (float)GetScreenWidth() / VIRTUAL_WIDTH,
+            (float)GetScreenHeight() / VIRTUAL_HEIGHT
+        );
+
+        Rectangle source = {
+            0, 0,
+            (float)worldTarget.texture.width,
+            -(float)worldTarget.texture.height
+        };
+
+        Rectangle dest = {
+            (GetScreenWidth() - VIRTUAL_WIDTH * scale) * 0.5f,
+            (GetScreenHeight() - VIRTUAL_HEIGHT * scale) * 0.5f,
+            VIRTUAL_WIDTH * scale,
+            VIRTUAL_HEIGHT * scale
+        };
+
+        BeginDrawing();
+            ClearBackground(BLACK);
+            DrawTexturePro(worldTarget.texture, source, dest, {0, 0}, 0, WHITE);
         EndDrawing();
     }
 
