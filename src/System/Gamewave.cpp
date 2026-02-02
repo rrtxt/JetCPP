@@ -1,7 +1,10 @@
 #include "Gamewave.h"
+#include "Common.h"
 #include "Spawner.h"
 #include "TimeScale.h"
 #include "raylib.h"
+#include "raymath.h"
+#include <algorithm>
 #include <cstdio>
 #include <utility>
 #include <memory>
@@ -21,7 +24,7 @@ void Gamewave::Start() {
     // spawner->Move(GetRandomValue(50, GetScreenWidth() - 50), -30);
     if (spawners.empty()) return;
 
-    int screenW = GetScreenWidth();
+    int screenW = VIRTUAL_WIDTH;
     int x1 = 0;
     int x2 = 0;
 
@@ -29,14 +32,22 @@ void Gamewave::Start() {
     x1 = GetRandomValue(MARGIN, screenW - MARGIN);
 
     // Pick second spawner until distance is OK
-    do {
-        x2 = GetRandomValue(MARGIN, screenW - MARGIN);
-    } while (std::abs(x1 - x2) < MIN_DISTANCE);
+    if (x1 <= screenW / 2) {
+        int minX = x1 + MIN_DISTANCE;
+        int maxX = screenW - MARGIN;
+        x2 = (minX <= maxX) ? GetRandomValue(minX, maxX) : maxX;
+    } else {
+        int minX = MARGIN;
+        int maxX = x1 - MIN_DISTANCE;
+        x2 = (minX <= maxX) ? GetRandomValue(minX, maxX) : minX;
+    }
 
     printf("Move spawner 1 to %d, %d\n", x1, SPAWN_Y);
-    printf("Move spawner 2 to %d, %d\n", x2, SPAWN_Y);
     spawners[0]->Move(x1, SPAWN_Y);
+
+    printf("Move spawner 2 to %d, %d\n", x2, SPAWN_Y);
     spawners[1]->Move(x2, SPAWN_Y);
+    printf("Finish moving spawner\n");
 }
 
 void Gamewave::Update() {
