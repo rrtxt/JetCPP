@@ -4,11 +4,11 @@
 #include "SoundSystem.h"
 
 void GameStateEvents::Register(EventSystem* eventSystem, GameState* gameState, SoundSystem* soundSystem){
-    eventSystem->Subscribe("OnPlayerDied", [&]() {
+    eventSystem->Subscribe("OnPlayerDied", [gameState]() {
         TimeScale::Set(0);
         gameState->isGameOver = true;
     });
-    eventSystem->Subscribe("OnPlayerHit", [&, eventSystem, soundSystem]() {
+    eventSystem->Subscribe("OnPlayerHit", [gameState, eventSystem, soundSystem]() {
         gameState->playerCurrentHealth -= 1;
         cout << "Player Health: " << gameState->playerCurrentHealth << endl;
 
@@ -16,16 +16,16 @@ void GameStateEvents::Register(EventSystem* eventSystem, GameState* gameState, S
         eventSystem->Emit("CameraShake");
         eventSystem->Emit("OnHealthchanged");
     });
-    eventSystem->Subscribe("OnHealthchanged", [&, eventSystem](){
+    eventSystem->Subscribe("OnHealthchanged", [gameState, eventSystem](){
         if(gameState->playerCurrentHealth <= 0){
             eventSystem->Emit("OnPlayerDied");
         }
     });
-    eventSystem->Subscribe("OnEnemyDestroyed", [&, soundSystem]() {
+    eventSystem->Subscribe("OnEnemyDestroyed", [gameState, soundSystem]() {
         gameState->score += 100;
         soundSystem->PlaySFX("explosion");
     });
-    eventSystem->Subscribe("OnBulletSpawn", [&, soundSystem]() {
+    eventSystem->Subscribe("OnBulletSpawn", [gameState, soundSystem]() {
         std::cout << "Bullet Spawned, playing sound" << std::endl;
         soundSystem->PlaySFX("shoot");
     });

@@ -13,7 +13,7 @@ void GameSceneEvents::Register(EventSystem *eventSystem, SceneManager *sceneMana
         sceneManager->ChangeScene(GameState::SETTINGS);
     });
 
-    eventSystem->Subscribe("QuitGame", [&]() {
+    eventSystem->Subscribe("QuitGame", [gameState]() {
         gameState->isShouldQuit = true;
     });
 
