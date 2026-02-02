@@ -1,4 +1,5 @@
 #include "PauseMenuUIComponent.h"
+#include "Common.h"
 #include "raylib.h"
 
 PauseMenuUIComponent::PauseMenuUIComponent(
@@ -38,8 +39,8 @@ void PauseMenuUIComponent::Draw() {
     // Dark overlay
     DrawRectangle(
         0, 0,
-        GetScreenWidth(),
-        GetScreenHeight(),
+        VIRTUAL_WIDTH,
+        VIRTUAL_HEIGHT,
         backgroundColor
     );
 
@@ -47,8 +48,8 @@ void PauseMenuUIComponent::Draw() {
     const char* titleText = "PAUSED";
     int titleWidth = MeasureText(titleText, titleFontSize);
 
-    int centerX = GetScreenWidth() / 2;
-    int centerY = GetScreenHeight() / 2;
+    int centerX = VIRTUAL_WIDTH / 2;
+    int centerY = VIRTUAL_HEIGHT / 2;
 
     DrawText(
         titleText,

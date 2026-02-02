@@ -1,4 +1,6 @@
 #include "GameOverUIComponent.h"
+#include "Common.h"
+#include <mutex>
 
 GameOverUIComponent::GameOverUIComponent(GameState* gameState, EventSystem* eventSystem)
     : gameState(gameState), eventSystem(eventSystem) {
@@ -19,12 +21,12 @@ void GameOverUIComponent::Draw() {
     // Calculate positions
     const char* titleText = "GAME OVER!";
     int titleWidth = MeasureText(titleText, titleFontSize);
-    titlePosition.x = GetScreenWidth() / 2 - titleWidth / 2;
-    titlePosition.y = GetScreenHeight() / 2 - titleFontSize / 2;
+    titlePosition.x = VIRTUAL_WIDTH / 2 - (float)titleWidth / 2;
+    titlePosition.y = VIRTUAL_HEIGHT / 2 - (float)titleFontSize / 2;
 
     const char* instructionText = "Press R to Restart or M/ESC for Main Menu";
     int instructionWidth = MeasureText(instructionText, instructionFontSize);
-    instructionPosition.x = GetScreenWidth() / 2 - instructionWidth / 2;
+    instructionPosition.x = VIRTUAL_WIDTH / 2 - (float)instructionWidth / 2;
     instructionPosition.y = titlePosition.y + titleFontSize + 20;
 
     // Draw game over text
@@ -37,7 +39,7 @@ void GameOverUIComponent::Draw() {
     const char* finalScoreText = TextFormat("Final Score: %d", gameState->score);
     int finalScoreWidth = MeasureText(finalScoreText, 24);
     DrawText(finalScoreText,
-        GetScreenWidth() / 2 - finalScoreWidth / 2,
+        VIRTUAL_WIDTH / 2 - (float)finalScoreWidth / 2,
         instructionPosition.y + instructionFontSize + 20,
         24, titleColor);
 }

@@ -1,4 +1,5 @@
 #include "System/Level.h"
+#include "Common.h"
 #include "Enemy/EnemyTypes.h"
 #include "EventSystem.h"
 #include "External/json.hpp"
@@ -29,7 +30,7 @@ void Level::InitFromJSON(nlohmann::json &data, EventSystem *es, GameState *gs) {
     }
 
     unique_ptr<Spawner> spawner =
-        make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, enemyType, es, gs);
+        make_unique<Spawner>(VIRTUAL_WIDTH / 2 - 15, -30, enemyType, es, gs);
 
     spawner->spawnSpread = spread;
 

@@ -1,4 +1,5 @@
 #include "MainMenuUIComponent.h"
+#include "Common.h"
 #include <raylib.h>
 
 MainMenuUIComponent::MainMenuUIComponent(GameState* gameState, EventSystem* eventSystem)
@@ -23,15 +24,15 @@ void MainMenuUIComponent::Draw() {
     // Draw title
     const char* title = "JET GAME";
     int titleWidth = MeasureText(title, titleFontSize);
-    titlePosition.x = GetScreenWidth() / 2 - titleWidth / 2;
-    titlePosition.y = GetScreenHeight() / 4;
+    titlePosition.x = VIRTUAL_WIDTH / 2 - (float)titleWidth / 2;
+    titlePosition.y = VIRTUAL_HEIGHT / 4;
 
     DrawText(title, titlePosition.x, titlePosition.y, titleFontSize, titleColor);
 
     // Draw menu options
     int totalMenuHeight = options.size() * optionSpacing;
-    menuStartPosition.x = GetScreenWidth() / 2;
-    menuStartPosition.y = GetScreenHeight() / 2 - totalMenuHeight / 2;
+    menuStartPosition.x = VIRTUAL_WIDTH / 2;
+    menuStartPosition.y = VIRTUAL_HEIGHT / 2 - (float)totalMenuHeight / 2;
 
     for (int i = 0; i < options.size(); i++) {
         Color color = (i == gameState->selectedMenuOption) ? selectedColor : normalColor;
@@ -39,7 +40,7 @@ void MainMenuUIComponent::Draw() {
         int optionWidth = MeasureText(optionText, optionFontSize);
 
         DrawText(optionText,
-            menuStartPosition.x - optionWidth / 2,
+            menuStartPosition.x - (float)optionWidth / 2,
             menuStartPosition.y + i * optionSpacing,
             optionFontSize, color);
     }
@@ -48,8 +49,8 @@ void MainMenuUIComponent::Draw() {
     const char* instruction = "Use UP/DOWN arrows to navigate, ENTER to select";
     int instrWidth = MeasureText(instruction, 16);
     DrawText(instruction,
-        GetScreenWidth() / 2 - instrWidth / 2,
-        GetScreenHeight() - 50,
+        VIRTUAL_WIDTH / 2 - (float)instrWidth / 2,
+        VIRTUAL_HEIGHT - 50,
         16, instructionColor);
 }
 
