@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Common.h"
 #include "IEntity.h"
 #include "TimeScale.h"
 #include "raylib.h"
@@ -75,7 +76,7 @@ void Player::Update() {
     // Update position
     Vector2 velocity = Vector2Scale(inputDirection, VELOCITY * GetFrameTime() * TimeScale::Get());
     position = Vector2Add(position, velocity);
-    position = Vector2Clamp(position, {0, 0}, {GetScreenWidth() - size.x, GetScreenHeight() - size.y});
+    position = Vector2Clamp(position, {0, 0}, {VIRTUAL_WIDTH - size.x, VIRTUAL_HEIGHT - size.y});
 
     // Update collision box
     collision.x = position.x;

@@ -25,7 +25,7 @@ void ZigZagEnemy::Update() {
         collision.y = position.y;
 
         // Set inactive if off-screen
-        if (position.y > GetScreenHeight()) {
+        if (position.y > VIRTUAL_HEIGHT) {
             active = false;
         }
     }

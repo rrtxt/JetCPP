@@ -1,4 +1,5 @@
 #include "Enemy/NormalEnemy.h"
+#include "Common.h"
 #include "IEntity.h"
 #include "TimeScale.h"
 #include "raylib.h"
@@ -23,7 +24,7 @@ void NormalEnemy::Update() {
         collision.y = position.y;
 
         // Set inactive if off-screen
-        if(position.y > GetScreenHeight()) {
+        if(position.y > VIRTUAL_HEIGHT) {
             active = false;
         }
     }
