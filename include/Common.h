@@ -11,6 +11,9 @@
 #include <vector>
 
 using namespace std;
+// Screen
+const float VIRTUAL_WIDTH = 600;
+const float VIRTUAL_HEIGHT = 900;
 
 // Sprite
 const float SPRITE_SCALE = 3.0f;
