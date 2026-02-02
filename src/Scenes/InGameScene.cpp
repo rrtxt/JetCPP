@@ -1,19 +1,20 @@
 #include "InGameScene.h"
 #include "CameraSystem.h"
+#include "Common.h"
 #include "GameState.h"
 #include "SoundSystem.h"
 #include "Spawner.h"
 #include "TimeScale.h"
 #include "Enemy/EnemyTypes.h"
 #include "CollisionSystem.h"
-#include <cmath>
 #include <memory>
 #include <raylib.h>
 #include <vector>
+#define ASSERT_PTR(x) if (!(x)) { TraceLog(LOG_ERROR, #x " is NULL"); return; }
 
 InGameScene::InGameScene(GameState* gameState, EventSystem* eventSystem, CameraSystem* cameraSystem)
     : cameraSystem(cameraSystem), Scene(gameState, eventSystem) {
-    InitializeGame();
+    // InitializeGame();
 }
 
 void InGameScene::Update() {
@@ -26,21 +27,18 @@ void InGameScene::Update() {
             std::cout << "All waves completed! Victory!" << std::endl;
         }
     }
-    // else {
-    //     HandleGameOver();
-    // }
 
     // Update UI components
     if (uiSystem) {
         uiSystem->Update();
     }
 
-    cameraSystem->Update();
+    if (cameraSystem){
+        cameraSystem->Update();
+    }
 }
 
 void InGameScene::Draw() {
-    ClearBackground(RAYWHITE);
-
     if (!gameState->isGameOver) {
         // Draw game entities
         if (player) player->Draw();
@@ -52,6 +50,11 @@ void InGameScene::Draw() {
 }
 
 void InGameScene::OnEnter(SoundSystem* soundSystem) {
+    // ASSERT_PTR(gameState);
+    // ASSERT_PTR(eventSystem);
+    // ASSERT_PTR(cameraSystem);
+    // ASSERT_PTR(player);
+    // ASSERT_PTR(soundSystem);
     std::cout << "Entered In-Game Scene" << std::endl;
 
     // Sound initialization
@@ -75,7 +78,7 @@ void InGameScene::OnEnter(SoundSystem* soundSystem) {
     } else {
         // Reset existing entities
         player->currentHealth = player->maxHealth;
-        player->position = {GetScreenWidth() / 2.0f - player->size.x / 2.0f, GetScreenHeight() / 2.0f};
+        player->position = {VIRTUAL_WIDTH / 2.0f - player->size.x / 2.0f, VIRTUAL_HEIGHT / 2.0f};
         player->bullets.clear();
 
         // Reset all spawners before restarting waves
@@ -99,17 +102,12 @@ void InGameScene::OnExit() {
 
 void InGameScene::InitializeGame() {
     // Create game entities with settings applied
-    player = std::make_unique<Player>(GetScreenWidth() / 2, GetScreenHeight() / 2, eventSystem);
-    normalSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
-    zigzagSpawner = std::make_unique<Spawner>(GetScreenWidth() / 2 - 15, -30, EnemyType::ZIGZAG, eventSystem, gameState);
+    player = std::make_unique<Player>(VIRTUAL_WIDTH / 2, VIRTUAL_HEIGHT / 2, eventSystem);
+    normalSpawner = std::make_unique<Spawner>(VIRTUAL_WIDTH / 2 - 15, -30, EnemyType::NORMAL, eventSystem, gameState);
+    zigzagSpawner = std::make_unique<Spawner>(VIRTUAL_WIDTH / 2 - 15, -30, EnemyType::ZIGZAG, eventSystem, gameState);
 
     waveSystem = std::make_unique<GamewaveSystem>(gameState, normalSpawner.get(), zigzagSpawner.get());
     uiSystem = std::make_unique<UISystem>(gameState, eventSystem);
-
-    // Define waves
-    // waveSystem->AddWave(make_shared<Gamewave>(normalSpawner.get(), 5, 1.0f));
-    // waveSystem->AddWave(make_shared<Gamewave>(zigzagSpawner.get(), 10, 0.8f));
-    // waveSystem->AddWave(make_shared<Gamewave>(normalSpawner.get(), 15, 0.6f));
 
     // Apply game settings to entities
     ApplyGameSettings();
@@ -120,8 +118,6 @@ void InGameScene::InitializeGame() {
     player->Start();
     std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
     waveSystem->Start();
-
-    std::cout << "Game initialized with settings applied - Player at: " << player->position.x << ", " << player->position.y << std::endl;
 }
 
 void InGameScene::UpdateGameLogic() {
@@ -135,6 +131,8 @@ void InGameScene::UpdateGameLogic() {
         gameState->isPaused = !gameState->isPaused;
     }
 
+    if (!waveSystem) return;
+
     // Check collisions
     auto currentWave = waveSystem->GetCurrentWave();
     if (!currentWave) return;
@@ -146,28 +144,7 @@ void InGameScene::UpdateGameLogic() {
         CollisionSystem::CheckCollisionPlayerEnemy(*player, spawner->enemies);
         CollisionSystem::CheckCollisionBulletEnemy(player->bullets, spawner->enemies);
     }
-
-    // if (player && currentWave) {
-    //     Spawner* currentSpawner = currentWave->GetSpawner();
-    //     if (currentSpawner) {
-    //         CollisionSystem::CheckCollisionPlayerEnemy(*player, currentSpawner->enemies);
-    //         CollisionSystem::CheckCollisionBulletEnemy(player->bullets, currentSpawner->enemies);
-    //     }
-    // }
 }
-
-// void InGameScene::HandleGameOver() {
-//     // Restart game
-//     if (IsKeyPressed(KEY_R)) {
-//         // eventSystem->Emit("ChangeToInGame");
-//         OnEnter(soundSystem);
-//     }
-
-//     if (IsKeyPressed(KEY_M) || IsKeyPressed(KEY_ESCAPE)) {
-//         // Return to main menu
-//         eventSystem->Emit("ChangeToMainMenu");
-//     }
-// }
 
 void InGameScene::ApplyGameSettings() {
     if (!player) return;
