@@ -11,7 +11,7 @@ struct CameraShake {
 class CameraSystem {
     public:
         Camera2D* camera;
-        Vector2 baseTarget;
+        Vector2 baseTarget = { 0.0f, 0.0f };
         CameraShake shake;
 
         CameraSystem(Camera2D* camera, EventSystem* eventSystem);
