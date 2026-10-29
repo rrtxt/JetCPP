@@ -63,6 +63,11 @@ target_precompile_headers(raylib_jet_cpp PRIVATE include/Common.h)
 # Link Raylib + Windows system libs
 target_link_libraries(raylib_jet_cpp raylib)
 
+# Hide the console window on Windows release builds
+if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
+    set_target_properties(raylib_jet_cpp PROPERTIES WIN32_EXECUTABLE ON)
+endif()
+
 if (MINGW)
     target_link_options(raylib_jet_cpp PRIVATE
         -static

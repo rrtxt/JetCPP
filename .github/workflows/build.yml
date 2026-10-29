@@ -3,14 +3,18 @@ name: Build JetCPP
 on:
   push:
     branches: [main]
+    tags: ['v*']
   pull_request:
     branches: [main]
+
+permissions:
+  contents: write
 
 jobs:
   build:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-22.04, macos-latest]
     runs-on: ${{matrix.os}}
 
     steps:
@@ -82,7 +86,7 @@ jobs:
       - name: Configure (macOS)
         if: runner.os == 'macOS'
         run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 
       - name: Build (macOS)
         if: runner.os == 'macOS'
@@ -109,3 +113,19 @@ jobs:
           name: JetCPP-${{ runner.os }}-${{github.run_number}}
           path: package/
           overwrite: true
+
+      - name: Archive
+        shell: bash
+        run: |
+          cd package
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            7z a ../JetCPP-Windows.zip .
+          else
+            tar czf ../JetCPP-$RUNNER_OS.tar.gz .
+          fi
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: JetCPP-*

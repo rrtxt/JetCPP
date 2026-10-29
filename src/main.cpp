@@ -11,6 +11,8 @@
 
 int main() {
     InitWindow(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, "Jet Game");
+    // Resolve relative asset paths from the executable's folder, not the launch directory
+    ChangeDirectory(GetApplicationDirectory());
     SetExitKey(KEY_NULL);
     InitAudioDevice();
 
